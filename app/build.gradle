@@ -1,0 +1,70 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.hqumath.nativedemo' //影响R类生成
+    //ndkVersion '21.4.7075529'//gstreamer指定版本21
+    compileSdk 29
+
+    defaultConfig {
+        applicationId "com.hqumath.nativedemo" //影响AndroidManifest中package
+        minSdk 21//so加固时限制21
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk 29
+        versionCode 20241225
+        versionName "1.0"
+        //multiDexEnabled true
+        ndk {
+            abiFilters "arm64-v8a"//主流手机
+            abiFilters "armeabi-v7a"//电视盒子
+            //abiFilters "x86"
+            //abiFilters "x86_64"
+        }
+        /*externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+                //目标平台，若需要更多平台的请自行配置
+                //abiFilters 'armeabi'
+            }
+        }*/
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    //配置自定义打包名称
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName
+            if (variant.buildType.name.equals('release')) {
+                fileName = "AndroidNative_${variant.mergedFlavor.versionName}_${variant.mergedFlavor.versionCode}.apk"
+            } else if (variant.buildType.name.equals('debug')) {
+                fileName = "AndroidNative_${variant.mergedFlavor.versionName}_debug_${variant.mergedFlavor.versionCode}.apk"
+            }
+            outputFileName = fileName
+        }
+    }
+    //开启动态库编译
+    /*ndk_build已弃用
+    externalNativeBuild {
+        ndkBuild {
+            path file('src/main/jni_test/Android.mk')
+        }
+    }*/
+    //cmake跨平台
+    externalNativeBuild {
+        cmake {
+            path file('src/main/jni_demo/CMakeLists.txt')
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+}

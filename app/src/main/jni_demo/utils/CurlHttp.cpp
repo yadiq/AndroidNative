@@ -4,6 +4,7 @@
 
 #include "CurlHttp.h"
 #include "Util.h"
+#include "../utils_android/LogUtil.h"
 
 CurlHttp::CurlHttp() {
     //初始化

@@ -2,55 +2,21 @@
 // 工具类
 //
 
-#include <malloc.h>
-#include <stdlib.h>
-#include <time.h>
-#include "jni.h"
 #include "Util.h"
 
 
-std::string Util::jstringTocstring(JNIEnv *env, jstring jstr) {
-    const char *str = (char *) env->GetStringUTFChars(jstr, NULL);
-    std::string cstr = str;
-    env->ReleaseStringUTFChars(jstr, str);
-    return cstr;
-}
-
-jstring Util::cstringTojstring(JNIEnv *env, std::string cstr) {
-    jstring jstr = env->NewStringUTF(cstr.c_str());
-    return jstr;
-}
-
-std::string Util::bytesToHex(char* bytes, int length) {
-    std::string str("");
+string Util::cstringToHex(char *cstr, int length) {
+    string str("");
     for (int i = 0; i < length; i++) {
-        str.append(1, hex_table[(*(bytes + i)) >> 4]);//在字符串后面添加1个字符
-        str.append(1, hex_table[(*(bytes + i)) & 0x0f]);
+        //append(n, c)，在字符串后面添加n个字符
+        str.append(1, hex_char[(*(cstr + i)) >> 4]);
+        str.append(1, hex_char[(*(cstr + i)) & 0x0f]);
     }
     return str;
 }
 
-/*char *jbyteArray2char(JNIEnv *env, jbyteArray byteArray) {
-    jbyte *byte = env->GetByteArrayElements(byteArray, 0);
-    int chars_len = env->GetArrayLength(byteArray);
-    *//*char *chars = new char[chars_len + 1];
-    memset(chars,0,chars_len + 1);//将指定的值 c 复制到 str 所指向的内存区域的前 n 个字节中
-    memcpy(chars, byte, chars_len);//从存储区 str2 复制 n 个字节到存储区 str1
-    chars[chars_len] = 0;*//*
-    char *chars = (char *) malloc(chars_len);
-    memcpy(chars, byte, chars_len);
-    env->ReleaseByteArrayElements(byteArray, byte, 0);
-    return chars;
-}
-
-jbyteArray char2jbyteArray(JNIEnv *env, char *data, int length) {
-    jbyte *byte = (jbyte *) data;
-    jbyteArray byteArray = env->NewByteArray(length);
-    env->SetByteArrayRegion(byteArray, 0, length, byte);
-    return byteArray;
-}*/
-
-
+//string => bytes
+//https://blog.csdn.net/weixin_52402390/article/details/122407222
 /*void hexStrToUint8(char *str, int strLen, char* dest) {
     unsigned int val;
       for(int i = 0; i < strLen; i += 2){
@@ -58,7 +24,6 @@ jbyteArray char2jbyteArray(JNIEnv *env, char *data, int length) {
         dest[i / 2] = val;
       }
 }
-
 
 *//**
  * 字节数组结尾增加\0

@@ -57,7 +57,12 @@ string Util::removeChar(string str, char c) {
     return str;
 }
 
-
+void Util::setRandomChars(char *str, int len) {
+    //srand((unsigned) time(NULL));//初始化随机数发生器
+    for (int i = 0; i < len; i++) {
+        str[i] = all_char[rand() % 62];
+    }
+}
 /////////////////////////old////////////////////////
 ///**
 // * 字节数组结尾增加\0

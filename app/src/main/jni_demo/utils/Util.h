@@ -51,6 +51,7 @@ public:
      */
     static string removeChar(string str, char c);
 
+    void setRandomChars(char *str, int len);
 private:
 
 

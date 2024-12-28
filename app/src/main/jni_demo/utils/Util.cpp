@@ -28,6 +28,16 @@ string Util::bytesToHex2(char *bytes, int length) {
     return str;
 }
 
+//将字符串转为整数
+//atoi、stoi、strtol的区别
+//		atoi()和strtol()都是c里面的函数，他们都可以将字符串转为int，他们都从字符串开始寻找数字、符号，然后遇到非法字符终止(小数点是非法字符)，不会报错。
+//		atoi()只能识别十进制的，而strtol()第三个参数可以设置进制。
+//		stoi()则是string库中的函数，它的参数是string
+char Util::hexToByte(char *hex) {
+    char byte = (char) strtol(hex, nullptr, 16);
+    return byte;
+}
+
 string Util::hexToBytes(char *hex, int length) {
     char dest[length / 2];
     unsigned int val;
@@ -46,3 +56,44 @@ string Util::removeChar(string str, char c) {
     str.erase(remove(str.begin(), str.end(), c), str.end());
     return str;
 }
+
+
+/////////////////////////old////////////////////////
+///**
+// * 字节数组结尾增加\0
+// * @param src
+// * @param len
+// * @param dest
+// */
+//void bytesToStr(char *src, int len, char *dest) {
+//    memcpy(dest, src, len);
+//    dest[len] = 0;
+//}
+//
+///**
+// * 设置随机字符
+// * @param str 结果
+// * @param len 字符长度
+// */
+//void setRandomChars(char *str, int len) {
+//    //srand((unsigned) time(NULL));//初始化随机数发生器
+//    for (int i = 0; i < len; i++) {
+//        str[i] = all_char[rand() % 62];
+//    }
+//}
+//
+///**
+// * 打印字节数组，十六进制
+// * @param src
+// * @param len
+// */
+//void printBytes(char *src, int len) {
+//    char dest[len * 2 + 1];
+//    for (int i = 0; i < len; i++) {
+//        sprintf(&dest[i * 2], "%02x", (unsigned char) src[i]);
+//    }
+//    dest[len * 2] = '\0';
+//    //LOGD("printBytes= %s", dest);
+//}
+
+

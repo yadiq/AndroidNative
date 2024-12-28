@@ -20,6 +20,13 @@ public:
      */
     static string cstringToHex(char *bytes, int length);
 
+    static string hexTostring(string hex);
+    /**
+     * string删除指定字符
+     * @param str
+     * @param c
+     */
+    static string removeChar(string str, char c);
 private:
 
 };

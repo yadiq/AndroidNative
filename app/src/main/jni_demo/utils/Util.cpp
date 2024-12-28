@@ -15,6 +15,19 @@ string Util::cstringToHex(char *cstr, int length) {
     return str;
 }
 
+//TODO
+string Util::hexTostring(string hex) {
+    return std::string();
+}
+
+string Util::removeChar(string str, char c) {
+    //使用 erase 和 remove 配合
+    //运行remove后, 容器的[first, newEnd)内的元素为所有未被删除的元素, [newEnd, end)之间的元素已经没用了.
+    //再运行erase, 清空[newEnd, end)之间的元素
+    str.erase(remove(str.begin(), str.end(), c), str.end());
+    return str;
+}
+
 //string => bytes
 //https://blog.csdn.net/weixin_52402390/article/details/122407222
 /*void hexStrToUint8(char *str, int strLen, char* dest) {

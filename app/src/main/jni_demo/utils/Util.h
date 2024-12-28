@@ -13,14 +13,28 @@ using namespace std;
 class Util {
 public:
     /**
-     * char* 转 hex (小写)
+     * byte转hex
+     * @param byte
+     * @return
+     */
+    static string byteToHex(char byte);
+
+    /**
+     * byte[]转hex
      * @param bytes
      * @param length
      * @return
      */
-    static string cstringToHex(char *bytes, int length);
+    static string bytesToHex(char *bytes, int length);
+    static string bytesToHex2(char *bytes, int length);
 
-    static string hexTostring(string hex);
+    /**
+     * hex转byte[]
+     * @param hex
+     * @param length
+     * @return
+     */
+    static string hexToBytes(char *hex, int length);
     /**
      * string删除指定字符
      * @param str
@@ -28,6 +42,7 @@ public:
      */
     static string removeChar(string str, char c);
 private:
+
 
 };
 

@@ -135,7 +135,7 @@ string getSign(JNIEnv *env) {
     int length = env->GetArrayLength(publicKeyArr);
     jbyte *bytes = env->GetByteArrayElements(publicKeyArr, 0);
     //转换为16进制
-    string signHex = Util::cstringToHex(reinterpret_cast<char *>(bytes), length);
+    string signHex = Util::bytesToHex(reinterpret_cast<char *>(bytes), length);
     //释放内存
     env->ReleaseByteArrayElements(publicKeyArr, bytes, 0);
     //LOGI("getSign: %s", hexStr);

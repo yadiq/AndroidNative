@@ -19,17 +19,23 @@ void TypeTest::pintTypeSize() {
 }
 
 void TypeTest::typeCast() {
-    const char *cstr1 = "123abc";//49 50 51 97 98 99
-    string hex1 = Util::cstringToHex(const_cast<char *>(cstr1), strlen(cstr1));
-    LOGD("cstringToHex: %s => %s", cstr1, hex1.c_str());
+    /*string str1 = Util::byteToHex('a');
+    LOGD("byteToHex: %s", str1.c_str());*/
 
-    string str1 = "55ed4f1c-7cf4-3315-3a9d-4ac8254ff18b";
+    /*const char* cstr1 = "123abc";//313233616263
+    string str2 = Util::bytesToHex2(const_cast<char *>(cstr1), strlen(cstr1));
+    LOGD("bytesToHex: %s", str2.c_str());*/
+
+    /*char byte1 = Util::hexToByte("61");
+    LOGD("hexToByte: %c", byte1);*/
+
+    /*char *hex = "313233616263";
+    string str = Util::hexToBytes(hex, strlen(hex));
+    LOGD("hexToBytes: %s", str.c_str());*/
+
+    /*string str1 = "55ed4f1c-7cf4-3315-3a9d-4ac8254ff18b";
     string str2 = Util::removeChar(str1, '-');
-    LOGD("removeChar: %s", str2.c_str());
+    LOGD("removeChar: %s", str2.c_str());*/
 
-//    std::string str2 = "Text with some   spaces";
-//    str2.erase(std::remove(str2.begin(), str2.end(), ' '),
-//               str2.end());
-//    LOGD("removeChar: %s", str2.c_str());
 }
 

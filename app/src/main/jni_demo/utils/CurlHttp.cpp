@@ -65,7 +65,7 @@ long CurlHttp::getRequest(const string &url, string &response) {
     if (res != CURLE_OK) {
         response.append(curl_easy_strerror(res));
     }
-    LOGD("GET %ld %s\n%s", http_code, url.c_str(), response.c_str());
+    //LOGD("GET %ld %s\n%s", http_code, url.c_str(), response.c_str());
     return http_code;
 }
 
@@ -99,7 +99,7 @@ long CurlHttp::postRequest(const string &url, const string &postParams, string &
     if (res != CURLE_OK) {
         response.append(curl_easy_strerror(res));
     }
-    LOGD("POST %ld %s\n%s", http_code, url.c_str(), response.c_str());
+    //LOGD("POST %ld %s\n%s", http_code, url.c_str(), response.c_str());
     return http_code;
 }
 

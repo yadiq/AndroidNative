@@ -5,7 +5,7 @@
 #include "utils/CurlHttp.h"
 #include "utils_android/JniUtil.h"
 #include "utils_android/LogUtil.h"
-#include "otherlibs/jsoncpp/JsonUtil.h"
+#include "test_curl/CurlTest.h"
 
 //JNIEnv* 指向JNI环境的指针，可以通过它来访问JNI提供的接口方法:
 //jobject Java对象中的this
@@ -37,26 +37,15 @@
 
 //网络请求
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_freedesktop_demo_Demo_httpget(JNIEnv *env, jclass thiz, jstring jstr) {
-    string url = JniUtil::jstringToString(env, jstr);
+Java_org_freedesktop_demo_Demo_curlTest(JNIEnv *env, jclass thiz, jstring jstr) {
+    string str = JniUtil::jstringToString(env, jstr);
     //网络请求
-    string response;
-    CurlHttp curl;
-    auto result = curl.getRequest(url, response);
-    if (result == 200) {
-        //json解析
-        Json::Value responseJson;
-        bool responseReader = JsonUtil::stringToJson(response, responseJson);
-        if (responseReader) {
-            string origin = responseJson["origin"].asString();
-            LOGD("httpget请求成功. origin:%s", origin.c_str());
-        } else {
-            LOGD("httpget请求失败. json解析失败");
-        }
-    } else {
-        LOGD("httpget请求失败. code: %d,response: %s", result, response.c_str());
-    }
-    return env->NewStringUTF(response.c_str());
+    CurlHttp::init();
+    CurlTest curlTest;
+    curlTest.curlGet();
+    curlTest.curlPost();
+    CurlHttp::cleanup();
+    return env->NewStringUTF(str.c_str());
 }
 
 //加解密

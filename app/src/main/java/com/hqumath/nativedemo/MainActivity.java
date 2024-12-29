@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         String decrypt = Lianjing.method02(encrypt);
         LogUtil.d("decrypt： " + decrypt);*/
             //网络请求
-            String response = Demo.httpget("http://httpbin.org/get?param1=value1");
-            LogUtil.d(TAG, "java response\n" + response);
+            Demo.curlTest("");
+
         });
         binding.btn1.performClick();
     }

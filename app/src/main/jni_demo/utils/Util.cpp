@@ -63,42 +63,11 @@ void Util::setRandomChars(char *str, int len) {
         str[i] = all_char[rand() % 62];
     }
 }
-/////////////////////////old////////////////////////
-///**
-// * 字节数组结尾增加\0
-// * @param src
-// * @param len
-// * @param dest
-// */
-//void bytesToStr(char *src, int len, char *dest) {
-//    memcpy(dest, src, len);
-//    dest[len] = 0;
-//}
-//
-///**
-// * 设置随机字符
-// * @param str 结果
-// * @param len 字符长度
-// */
-//void setRandomChars(char *str, int len) {
-//    //srand((unsigned) time(NULL));//初始化随机数发生器
-//    for (int i = 0; i < len; i++) {
-//        str[i] = all_char[rand() % 62];
-//    }
-//}
-//
-///**
-// * 打印字节数组，十六进制
-// * @param src
-// * @param len
-// */
-//void printBytes(char *src, int len) {
-//    char dest[len * 2 + 1];
-//    for (int i = 0; i < len; i++) {
-//        sprintf(&dest[i * 2], "%02x", (unsigned char) src[i]);
-//    }
-//    dest[len * 2] = '\0';
-//    //LOGD("printBytes= %s", dest);
-//}
+
+void Util::cstringAdd0(char *src, int len, char *dest) {
+    memcpy(dest, src, len);
+    dest[len] = 0;
+}
+
 
 

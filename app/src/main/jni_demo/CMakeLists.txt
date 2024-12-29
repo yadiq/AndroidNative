@@ -5,27 +5,30 @@ cmake_minimum_required(VERSION 3.4.1)
 # 获取目录下所有CPP的文件
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_PARENT "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/utils/*.cpp")
-file(GLOB_RECURSE SOURCE_CPP_FILES_OF_CPPTEST_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/cpp_test/*.cpp")
+file(GLOB_RECURSE SOURCE_CPP_FILES_OF_UTILS_ANDROID "${CMAKE_CURRENT_SOURCE_DIR}/utils_android/*.cpp")
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_JSONCPP "${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/jsoncpp/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/jsoncpp/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/jsoncpp/*.inl")
+file(GLOB_RECURSE SOURCE_CPP_FILES_OF_TEST_CURL "${CMAKE_CURRENT_SOURCE_DIR}/test_curl/*.cpp")
+file(GLOB_RECURSE SOURCE_CPP_FILES_OF_TEST_TYPE "${CMAKE_CURRENT_SOURCE_DIR}/test_type/*.cpp")
 
 # 指定头文件路径
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/openssl/include/
         ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/openssl/include/${ANDROID_ABI}/
         ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/curl/include/
-#        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/jsoncpp/
 )
 
 # 添加动态库，指定库名称、类型、相对路径
 add_library(
-        test
+        demo
         SHARED
         ${SOURCE_CPP_FILES_OF_PARENT}
         ${SOURCE_CPP_FILES_OF_UTILS}
-        ${SOURCE_CPP_FILES_OF_CPPTEST_UTILS}
+        ${SOURCE_CPP_FILES_OF_UTILS_ANDROID}
         ${SOURCE_CPP_FILES_OF_JSONCPP}
+        ${SOURCE_CPP_FILES_OF_TEST_CURL}
+        ${SOURCE_CPP_FILES_OF_TEST_TYPE}
 )
 
 # 添加预编译的库，指定预编译的库的路径
@@ -55,7 +58,7 @@ set_target_properties(curl
 
 # 链接库
 target_link_libraries(
-        test
+        demo
         crypto
         ssl
         curl #curl依赖于zlib和openssl

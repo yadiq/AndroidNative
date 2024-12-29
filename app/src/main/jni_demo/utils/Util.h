@@ -51,7 +51,20 @@ public:
      */
     static string removeChar(string str, char c);
 
-    void setRandomChars(char *str, int len);
+    /**
+     * 设置随机字符
+     * @param str 结果
+     * @param len 字符长度
+     */
+    static void setRandomChars(char *str, int len);
+
+    /**
+     * 字节数组结尾增加\0
+     * @param src
+     * @param len
+     * @param dest
+     */
+    static void cstringAdd0(char *src, int len, char *dest);
 private:
 
 

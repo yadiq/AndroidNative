@@ -33,16 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
         //格式化字符串
         //StringUtil.stringToArray("ivrealfly0241116");
+        //多线程
+        Demo demo = new Demo();
+        demo.thread1();
 
         binding.btn1.setOnClickListener(v -> {
+            //网络请求
+            //Demo.curlTest("");
+
             //加密
         /*String encrypt = Lianjing.method01("123456789012345");
         LogUtil.d("encrypt： " + encrypt);
         String decrypt = Lianjing.method02(encrypt);
         LogUtil.d("decrypt： " + decrypt);*/
-            //网络请求
-            Demo.curlTest("");
-
         });
         binding.btn1.performClick();
     }

@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <string>
+#include <unistd.h>
 
 #include "utils/Util.h"
 #include "utils/CurlHttp.h"
@@ -34,6 +35,16 @@
 //NewString/NewStringUTF 构建UTF-16/UTF-8字符串对象
 
 //extern "C" 告诉 C++ 编译器以 C 的方式来编译这个函数，以方便其他 C 程序链接和访问该函数
+
+JavaVM *gJavaVM = NULL;//全局 JavaVM 变量, 用于获取环境变量env
+//JavaVM是虚拟机VM在JNI中的表示,一个进程JVM中只有一个JavaVM对象，这个对象是线程共享的
+jobject gJavaObj = NULL;//全局 Jobject 变量, 用于存储jobject thiz
+jmethodID methodId = NULL;//全局的方法ID
+
+//这里通过标志位来确定 两个线程的工作都完成了再执行 DeleteGlobalRef
+//当然也可以通过加锁实现
+bool main_finished = false;
+bool background_finished = false;
 
 //网络请求
 extern "C" JNIEXPORT jstring JNICALL
@@ -76,4 +87,60 @@ Java_org_freedesktop_demo_Demo_test1(JNIEnv *env, jclass thiz, jstring jstr) {
 
     std::string hexStr = "Hello from C++";
     return env->NewStringUTF(hexStr.c_str());
+}
+
+//多线程-执行
+static void *native_thread_exec(void *arg) {
+    LOGE("nativeThreadExec");
+    LOGE("The pthread id : %d\n", pthread_self());
+
+    //获取环境变量
+    JNIEnv *env = JniUtil::getEnv(gJavaVM);
+    if (env == NULL)
+        return ((void *) 0);
+
+    for (int i = 0; i < 5; i++) {
+        usleep(2);
+        //跨线程回调Java层函数
+        env->CallVoidMethod(gJavaObj, methodId, i);
+    }
+
+    background_finished = true;
+    if (main_finished && background_finished) {
+        env->DeleteGlobalRef(gJavaObj);
+        LOGE("全局引用在子线程销毁");
+    }
+
+    JniUtil::releaseEnv(gJavaVM);
+    return ((void *) 0);
+}
+
+//多线程
+extern "C" JNIEXPORT void JNICALL
+Java_org_freedesktop_demo_Demo_thread1(JNIEnv *env, jobject thiz) {
+    //全局 JavaVM 变量, 用于获取环境变量env
+    env->GetJavaVM(&gJavaVM);
+    //全局 Jobject 变量, 用于存储jobject thiz
+    gJavaObj = env->NewGlobalRef(thiz);
+    //全局的方法ID
+    jclass jclass = env->GetObjectClass(thiz);
+    methodId = env->GetMethodID(jclass, "javaCallback", "(I)V");
+    env->DeleteLocalRef(jclass);
+
+    pthread_t id;
+    if (pthread_create(&id, NULL, native_thread_exec, NULL) != 0) {
+        return;
+    }
+
+    for (int i = 10; i < 55; i++) {
+        usleep(20);//把进程挂起一段时间 μs
+        //回调Java层函数
+        env->CallVoidMethod(gJavaObj, methodId, i);
+    }
+
+    main_finished = true;
+    if (main_finished && background_finished && !env->IsSameObject(gJavaObj, NULL)) {
+        env->DeleteGlobalRef(gJavaObj);
+        LOGE("全局引用在主线程销毁");
+    }
 }

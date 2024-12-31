@@ -37,12 +37,19 @@ public class MainActivity extends AppCompatActivity {
             Demo.curlTest("");
         });
 
+        //测试
+        binding.btnTest.setOnClickListener(v -> {
+            String result = Demo.registerNatives("123");
+            binding.tv1.setText("registerNatives: " + result);
+
+        });
+
 
         //格式化字符串
         //StringUtil.stringToArray("ivrealfly0241116");
         //多线程
-        Demo demo = new Demo();
-        demo.thread1();
+        //Demo demo = new Demo();
+        //demo.thread1();
 
 
 //        binding.btn2.setOnClickListener(v -> {

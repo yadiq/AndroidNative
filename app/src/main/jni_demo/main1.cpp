@@ -8,14 +8,15 @@
 
 JNIEXPORT jstring JNICALL
 registerNatives(JNIEnv *env, jclass thiz, jstring jstr) {
-  string str = JniUtil::jstringToString(env, jstr);
-  string hex = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
-   return env->NewStringUTF(hex.c_str());
+    string str = JniUtil::jstringToString(env, jstr);
+    string hex = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
+    jstring resultStr = env->NewStringUTF(hex.c_str());
+    return resultStr;
 }
 
 //构建 JNINativeMethod 数组
 static JNINativeMethod methods[] = {
-        {"registerNatives", "(Ljava/lang/String;)Ljava/lang/String;", (void *)registerNatives},
+        {"registerNatives", "(Ljava/lang/String;)Ljava/lang/String;", (void *) registerNatives},
 };
 
 //动态注册的入口函数

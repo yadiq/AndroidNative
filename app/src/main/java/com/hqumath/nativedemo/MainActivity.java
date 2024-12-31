@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
             Demo.curlTest("");
         });
 
+        //加解密
+        binding.btnEncrypt.setOnClickListener(v -> {
+            String value = "123abc";
+            Demo.encryptTest(value);
+        });
+
         //数据类型转换
         binding.btnType.setOnClickListener(v -> {
             String value = "123abc";

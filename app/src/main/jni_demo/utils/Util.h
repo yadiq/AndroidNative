@@ -49,7 +49,7 @@ public:
      * @param str
      * @param c
      */
-    static string removeChar(string str, char c);
+    static string removeChar(string &str, char c);
 
     /**
      * 设置随机字符

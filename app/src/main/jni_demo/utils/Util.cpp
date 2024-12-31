@@ -49,7 +49,7 @@ string Util::hexToBytes(char *hex, int length) {
     return str;
 }
 
-string Util::removeChar(string str, char c) {
+string Util::removeChar(string &str, char c) {
     //使用 erase 和 remove 配合
     //运行remove后, 容器的[first, newEnd)内的元素为所有未被删除的元素, [newEnd, end)之间的元素已经没用了.
     //再运行erase, 清空[newEnd, end)之间的元素

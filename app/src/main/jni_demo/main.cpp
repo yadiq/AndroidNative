@@ -8,6 +8,7 @@
 #include "utils_android/LogUtil.h"
 #include "test_curl/CurlTest.h"
 #include "test_type/TypeTest.h"
+#include "test/OpensslTest.h"
 
 //JNIEnv* 指向JNI环境的指针，可以通过它来访问JNI提供的接口方法:
 //jobject Java对象中的this
@@ -63,7 +64,7 @@ Java_org_freedesktop_demo_Demo_curlTest(JNIEnv *env, jclass thiz, jstring jstr) 
 //加解密
 extern "C" JNIEXPORT jstring JNICALL
 Java_org_freedesktop_demo_Demo_encryptTest(JNIEnv *env, jclass thiz, jstring jstr) {
-//    TypeTest::typeCast();
+    OpensslTest::base64();
 
 
     std::string hexStr = "Hello from C++";

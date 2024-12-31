@@ -31,20 +31,23 @@ public class MainActivity extends AppCompatActivity {
 
         CommonUtil.init(this);
 
+        //网络请求
+        binding.btnHttp.setOnClickListener(v -> {
+            binding.tv1.setText("c++发送get post请求，响应结果见日志。");
+            Demo.curlTest("");
+        });
+
+
         //格式化字符串
         //StringUtil.stringToArray("ivrealfly0241116");
 
-        binding.btn1.setOnClickListener(v -> {
-            //加密
-        /*String encrypt = Lianjing.method01("123456789012345");
-        LogUtil.d("encrypt： " + encrypt);
-        String decrypt = Lianjing.method02(encrypt);
-        LogUtil.d("decrypt： " + decrypt);*/
-            //网络请求
-            Demo.curlTest("");
-
-        });
-        binding.btn1.performClick();
+//        binding.btn2.setOnClickListener(v -> {
+//            //加密
+//        /*String encrypt = Lianjing.method01("123456789012345");
+//        LogUtil.d("encrypt： " + encrypt);
+//        String decrypt = Lianjing.method02(encrypt);
+//        LogUtil.d("decrypt： " + decrypt);*/
+//        });
     }
 
     @Override

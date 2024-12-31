@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <Button
-        android:id="@+id/btn1"
+        android:id="@+id/btnHttp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="g711编解码器" />
+        android:text="http请求" />
 
     <Button
-        android:id="@+id/btn2"
+        android:id="@+id/btnEncrypt"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="g723编解码器" />
+        android:text="加解密" />
 
     <TextView
-        android:id="@+id/tvResult"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Result" />
+        android:textColor="@color/black"
+        tools:text="测试信息" />
+
 
 </LinearLayout>

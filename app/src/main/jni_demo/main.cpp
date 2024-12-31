@@ -7,6 +7,7 @@
 #include "utils_android/JniUtil.h"
 #include "utils_android/LogUtil.h"
 #include "test_curl/CurlTest.h"
+#include "test_type/TypeTest.h"
 
 //JNIEnv* 指向JNI环境的指针，可以通过它来访问JNI提供的接口方法:
 //jobject Java对象中的this
@@ -61,7 +62,7 @@ Java_org_freedesktop_demo_Demo_curlTest(JNIEnv *env, jclass thiz, jstring jstr) 
 
 //加解密
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_freedesktop_demo_Demo_encrypt(JNIEnv *env, jclass thiz, jstring jstr) {
+Java_org_freedesktop_demo_Demo_encryptTest(JNIEnv *env, jclass thiz, jstring jstr) {
 //    TypeTest::typeCast();
 
 
@@ -71,18 +72,19 @@ Java_org_freedesktop_demo_Demo_encrypt(JNIEnv *env, jclass thiz, jstring jstr) {
 
 //数据类型转换
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_freedesktop_demo_Demo_type(JNIEnv *env, jclass thiz, jstring jstr) {
-//    TypeTest::typeCast();
-
-
-    std::string hexStr = "Hello from C++";
-    return env->NewStringUTF(hexStr.c_str());
+Java_org_freedesktop_demo_Demo_typeTest(JNIEnv *env, jclass thiz, jstring jstr) {
+    TypeTest::pintTypeSize();
+    TypeTest::typeCast();
+    //bytes转hex
+    string str = JniUtil::jstringToString(env, jstr);
+    string result = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
+    return env->NewStringUTF(result.c_str());
 }
 
 //测试
 extern "C" JNIEXPORT jstring JNICALL
 Java_org_freedesktop_demo_Demo_test1(JNIEnv *env, jclass thiz, jstring jstr) {
-//    TypeTest::typeCast();
+
 
 
     std::string hexStr = "Hello from C++";

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hqumath.nativedemo.databinding.ActivityMainBinding;
 import com.hqumath.nativedemo.utils.CommonUtil;
-import com.hqumath.nativedemo.utils.LogUtil;
 
 import org.freedesktop.demo.Demo;
 
@@ -37,8 +36,16 @@ public class MainActivity extends AppCompatActivity {
             Demo.curlTest("");
         });
 
+        //数据类型转换
+        binding.btnType.setOnClickListener(v -> {
+            String value = "123abc";
+            String result = Demo.typeTest(value);
+            binding.tv1.setText("bytes转hex: " + value + " => " + result + "\nc++数据类型转换，结果见日志。");
+        });
+
         //测试
         binding.btnTest.setOnClickListener(v -> {
+            //动态注册的方法
             String result = Demo.registerNatives("123");
             binding.tv1.setText("registerNatives: " + result);
 

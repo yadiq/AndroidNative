@@ -20,11 +20,19 @@
         android:text="加解密" />
 
     <Button
+        android:id="@+id/btnType"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="数据类型转换" />
+
+    <Button
         android:id="@+id/btnTest"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="测试" />
+
 
     <TextView
         android:layout_marginTop="10dp"

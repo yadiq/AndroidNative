@@ -7,6 +7,7 @@
 #include "../utils_android/LogUtil.h"
 #include "../utils/Util.h"
 
+
 void TypeTest::pintTypeSize() {
     LOGD("bool 所占字节数:%lu, 最大值:%d, 最小值：%d", sizeof(bool), numeric_limits<bool>::max(),
          numeric_limits<bool>::min());
@@ -16,26 +17,24 @@ void TypeTest::pintTypeSize() {
          numeric_limits<int>::min());
     LOGD("float 所占字节数:%lu, 最大值:%f, 最小值：%f", sizeof(float), numeric_limits<float>::max(),
          numeric_limits<float>::min());
+    LOGD("long 所占字节数:%lu, 最大值:%ld, 最小值：%ld", sizeof(long), numeric_limits<long>::max(),
+         numeric_limits<long>::min());
 }
 
 void TypeTest::typeCast() {
-//    string str1 = Util::byteToHex('a');
-//    LOGD("byteToHex: %s", str1.c_str());
-//
-//    const char* cstr1 = "123abc";//313233616263
-//    string str2 = Util::bytesToHex2(const_cast<char *>(cstr1), strlen(cstr1));
-//    LOGD("bytesToHex: %s", str2.c_str());
-//
-//    char byte1 = Util::hexToByte("61");
-//    LOGD("hexToByte: %c", byte1);
-//
-//    char *hex = "313233616263";
-//    string str = Util::hexToBytes(hex, strlen(hex));
-//    LOGD("hexToBytes: %s", str.c_str());
+    string str1 = Util::byteToHex('a');
+    LOGD("byteToHex: %s", str1.c_str());
 
-    string str1 = "55ed4f1c-7cf4-3315-3a9d-4ac8254ff18b";
-    string str2 = Util::removeChar(str1, '-');
-    LOGD("removeChar: %s", str2.c_str());
+    string str2 = "123abc"; //0x313233616263
+    str2 = Util::bytesToHex(const_cast<char *>(str2.c_str()), str2.length());
+    LOGD("bytesToHex: %s", str2.c_str());
 
+    string str3 = "313233616263";
+    str3 = Util::hexToBytes(const_cast<char *>(str3.c_str()), str3.length());
+    LOGD("hexToBytes: %s", str3.c_str());
+
+    string str4 = "55ed4f1c-7cf4-3315-3a9d-4ac8254ff18b";
+    str4 = Util::removeChar(str4, '-');
+    LOGD("removeChar: %s", str4.c_str());
 }
 

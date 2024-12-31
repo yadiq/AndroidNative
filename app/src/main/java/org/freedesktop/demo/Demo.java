@@ -18,8 +18,8 @@ public class Demo {
     }
 
     public static native String curlTest(String value);
-    public static native String encrypt(String value);
-    public static native String type(String value);
+    public static native String encryptTest(String value);
+    public static native String typeTest(String value);
     public static native String test1(String value);
     //动态注册的方法
     public static native String registerNatives(String value);

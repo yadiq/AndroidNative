@@ -1,5 +1,7 @@
 package org.freedesktop.demo;
 
+import com.hqumath.nativedemo.utils.LogUtil;
+
 /**
  * ****************************************************************
  * 作    者: Created by gyd
@@ -19,9 +21,15 @@ public class Demo {
     public static native String encrypt(String value);
     public static native String type(String value);
     public static native String test1(String value);
+    public static native String registerNatives(String value);
 
+    public native void thread1();
+
+    private void javaCallback(int count) {
+        LogUtil.e(TAG, "onNativeCallBack : " + count);
+    }
 
     ////////////////////////////////////java///////////////////////////////////
-//    private final String TAG = "JNI_log";
+    private final String TAG = "Native";
 
 }

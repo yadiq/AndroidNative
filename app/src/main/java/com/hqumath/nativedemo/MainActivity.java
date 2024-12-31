@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
         //格式化字符串
         //StringUtil.stringToArray("ivrealfly0241116");
+        //多线程
+        Demo demo = new Demo();
+        demo.thread1();
+
 
 //        binding.btn2.setOnClickListener(v -> {
 //            //加密
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 //        String decrypt = Lianjing.method02(encrypt);
 //        LogUtil.d("decrypt： " + decrypt);*/
 //        });
+
     }
 
     @Override

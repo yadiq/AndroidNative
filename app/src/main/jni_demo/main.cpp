@@ -65,7 +65,7 @@ Java_org_freedesktop_demo_Demo_curlTest(JNIEnv *env, jclass thiz, jstring jstr) 
 extern "C" JNIEXPORT jstring JNICALL
 Java_org_freedesktop_demo_Demo_encryptTest(JNIEnv *env, jclass thiz, jstring jstr) {
     OpensslTest::base64();
-
+    OpensslTest::aes();
 
     std::string hexStr = "Hello from C++";
     return env->NewStringUTF(hexStr.c_str());
@@ -95,7 +95,7 @@ Java_org_freedesktop_demo_Demo_test1(JNIEnv *env, jclass thiz, jstring jstr) {
 //多线程-执行
 static void *native_thread_exec(void *arg) {
     LOGE("nativeThreadExec");
-    LOGE("The pthread id : %d\n", pthread_self());
+    LOGE("The pthread id : %ld\n", pthread_self());
 
     //获取环境变量
     JNIEnv *env = JniUtil::getEnv(gJavaVM);

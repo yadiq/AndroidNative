@@ -57,6 +57,11 @@ string Util::removeChar(string &str, char c) {
     return str;
 }
 
+//生成随机数
+//unsigned char iv[12];
+//if (RAND_bytes(iv, sizeof(iv)) != 1) {
+//LOGD("Error generating GCM IV.\n");
+//}
 void Util::setRandomChars(char *str, int len) {
     //srand((unsigned) time(NULL));//初始化随机数发生器
     for (int i = 0; i < len; i++) {

@@ -148,15 +148,19 @@ int gcm_decrypt(unsigned char *ciphertext, int ciphertext_len,
 #define GCM_IV_SIZE 12
 #define GCM_TAG_SIZE 16
 
+//验证。在线加解密工具
+// https://www.lddgo.net/en/encrypt/aes
+// 注意；加密结果是 ciphertext + tag ，而不是 iv + ciphertext + tag
+
 string AesUtil::aes256gcmEncrypt(const void *key, const char *plaintext) {
     int plaintext_len = strlen(plaintext);
 
     //生成初始化向量
-    unsigned char iv[GCM_IV_SIZE];//12B 随机数
-    if (RAND_bytes(iv, sizeof(iv)) != 1) {
-        LOGD("Error generating GCM IV.\n");
-    }
-    //unsigned char iv[13] = "123456789012";TODO
+//    unsigned char iv[GCM_IV_SIZE];//12B 随机数
+//    if (RAND_bytes(iv, sizeof(iv)) != 1) {
+//        LOGD("Error generating GCM IV.\n");
+//    }
+    unsigned char iv[13] = "123456789012";//TODO
 
     int iv_len = GCM_IV_SIZE;
     unsigned char tag[GCM_TAG_SIZE];

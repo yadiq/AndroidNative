@@ -22,6 +22,32 @@ public:
      */
     static string aes256gcmDecrypt(const char *cipherBase64, const void *key, const char *iv);
 
+    /**
+     * aes_256_cbc加密函数
+     * @param plaintext 明文
+     * @return 16进制密文
+     */
+    static string aes256cbcEncrypt(const char *plaintext, const void *key, const char *iv);
+    /**
+     * aes_256_cbc解密函数
+     * @param ciphertext 密文base64编码
+     * @return 明文
+     */
+    static string aes256cbcDecrypt(const char *cipherBase64, const void *key, const char *iv);
+
+    /**
+     * aes_128_ecb加密函数
+     * @param plaintext 明文
+     * @return 16进制密文
+ */
+    static string aes128ecbEncrypt(const char *plaintext, const void *key);
+    /**
+     * aes_128_ecb解密函数
+     * @param ciphertext 密文base64编码
+     * @return 明文
+     */
+    static string aes128ecbDecrypt(const char *cipherBase64, const void *key);
+
 };
 
 

@@ -8,6 +8,7 @@
 #include "../utils_openssl/Base64Util.h"
 #include "../utils_android/LogUtil.h"
 #include "../utils_openssl/AesUtil.h"
+#include "../utils_openssl/ShaUtil.h"
 
 using namespace std;
 
@@ -24,6 +25,7 @@ void OpensslTest::aes() {
     const char *key256 = "12345678901234567890123456789012";
     const char *key128 = "1234567890123456";
     const char *iv = "1234567890123456";
+
     string aes256gcmEncrypt = AesUtil::aes256gcmEncrypt(str, key256, iv);
     LOGD("aes256gcmEncrypt: %s", aes256gcmEncrypt.c_str());
     string aes256gcmDecrypt = AesUtil::aes256gcmDecrypt(aes256gcmEncrypt.c_str(), key256, iv);
@@ -38,4 +40,15 @@ void OpensslTest::aes() {
     LOGD("aes128ecbEncrypt: %s", aes128ecbEncrypt.c_str());
     string aes128ecbDecrypt = AesUtil::aes128ecbDecrypt(aes128ecbEncrypt.c_str(), key128);
     LOGD("aes128ecbDecrypt: %s", aes128ecbDecrypt.c_str());
+}
+
+void OpensslTest::sha() {
+    const char *str = "123abc";
+    const char *key256 = "12345678901234567890123456789012";
+
+    string sha1Encrypt = ShaUtil::sha1Encrypt(str);
+    LOGD("sha1Encrypt: %s", sha1Encrypt.c_str());
+
+    string hmacSHA256Encrypt = ShaUtil::hmacEncrypt("SHA256", str, key256);
+    LOGD("hmacSHA256Encrypt: %s", hmacSHA256Encrypt.c_str());
 }

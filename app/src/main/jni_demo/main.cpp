@@ -68,6 +68,7 @@ Java_org_freedesktop_demo_Demo_encryptTest(JNIEnv *env, jclass thiz, jstring jst
     //测试
     OpensslTest::base64();
     OpensslTest::aes();
+    OpensslTest::sha();
     //aes256cbc加密
     string str = JniUtil::jstringToString(env, jstr);
     const char *key256 = "12345678901234567890123456789012";

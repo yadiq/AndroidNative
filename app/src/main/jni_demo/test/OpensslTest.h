@@ -10,6 +10,7 @@ class OpensslTest {
 public:
     static void base64();
     static void aes();
+    static void sha();
 };
 
 

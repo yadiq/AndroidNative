@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         binding.btnEncrypt.setOnClickListener(v -> {
             String value = "123abc";
             String result = Demo.encryptTest(value);
-            binding.tv1.setText("aes256cbc加密:\n " + value + " => " + result + "\naes256gcm、aes256cbc、aes128ecb加解密，\n加密结果base64编码，见日志。");
+            binding.tv1.setText("aes256cbc加密:\n " + value + " => " + result + "\naes256gcm、aes256cbc、aes128ecb加解密，加密结果base64编码。\nsha1、hmacSHA256加密，加密结果转hex。结果见日志。");
         });
 
         //数据类型转换

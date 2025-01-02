@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
         //加解密
         binding.btnEncrypt.setOnClickListener(v -> {
             String value = "123abc";
-            Demo.encryptTest(value);
+            String result = Demo.encryptTest(value);
+            binding.tv1.setText("aes256cbc加密:\n " + value + " => " + result + "\naes256gcm、aes256cbc、aes128ecb加解密，\n加密结果base64编码，见日志。");
         });
 
         //数据类型转换

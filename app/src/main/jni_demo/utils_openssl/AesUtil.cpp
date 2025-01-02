@@ -149,7 +149,7 @@ int gcm_decrypt(unsigned char *ciphertext, int ciphertext_len,
 
 //验证。在线加解密工具
 // https://www.lddgo.net/en/encrypt/aes
-// 注意；加密结果是 ciphertext + tag
+// 注意；nopadding, 加密结果是 ciphertext + tag
 
 string AesUtil::aes256gcmEncrypt(const char *plaintext, const void *key, const char *iv) {
     unsigned char tag[GCM_TAG_SIZE];
@@ -271,6 +271,10 @@ int aes_256_cbc_decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned 
     return plaintext_len;
 }
 
+//验证。在线加解密工具
+// https://www.lddgo.net/en/encrypt/aes
+// 注意；pkcs5padding 或 pkcs7padding
+
 string AesUtil::aes256cbcEncrypt(const char *plaintext, const void *key, const char *iv) {
     int plaintext_len = strlen(plaintext);
     //密文的长度大于等于明文长度，是16的倍数
@@ -378,6 +382,10 @@ int aes_128_ecb_decrypt(char *in, int in_len, char *key, char *out) {
     free(result);
     return (len1 + len2);
 }
+
+//验证。在线加解密工具
+// https://www.lddgo.net/en/encrypt/aes
+// 注意；pkcs5padding 或 pkcs7padding
 
 string AesUtil::aes128ecbEncrypt(const char *plaintext, const void *key) {
     int plaintext_len = strlen(plaintext);

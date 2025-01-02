@@ -145,54 +145,38 @@ int gcm_decrypt(unsigned char *ciphertext, int ciphertext_len,
     }
 }
 
-#define GCM_IV_SIZE 12
 #define GCM_TAG_SIZE 16
 
 //验证。在线加解密工具
 // https://www.lddgo.net/en/encrypt/aes
 // 注意；加密结果是 ciphertext + tag ，而不是 iv + ciphertext + tag
 
-string AesUtil::aes256gcmEncrypt(const void *key, const char *plaintext) {
-    int plaintext_len = strlen(plaintext);
-
-    //生成初始化向量
-//    unsigned char iv[GCM_IV_SIZE];//12B 随机数
-//    if (RAND_bytes(iv, sizeof(iv)) != 1) {
-//        LOGD("Error generating GCM IV.\n");
-//    }
-    unsigned char iv[13] = "123456789012";//TODO
-
-    int iv_len = GCM_IV_SIZE;
+string AesUtil::aes256gcmEncrypt(const char *plaintext, const void *key, const char *iv) {
     unsigned char tag[GCM_TAG_SIZE];
-    int tag_len = GCM_TAG_SIZE;
     //加密后密文
-    unsigned char ciphertext[plaintext_len];
-    int ciphertext_len = gcm_encrypt((unsigned char *) plaintext, plaintext_len, NULL, 0, (unsigned char *) key, iv,
-                                     iv_len, ciphertext, tag);
-    unsigned char out[iv_len + ciphertext_len + tag_len];
-    //加密结果 iv + ciphertext + tag
-    memcpy(out, iv, iv_len);
-    memcpy(out + iv_len, ciphertext, ciphertext_len);
-    memcpy(out + iv_len + ciphertext_len, tag, tag_len);
+    unsigned char ciphertext[strlen(plaintext)];
+    int ciphertext_len = gcm_encrypt((unsigned char *) plaintext, strlen(plaintext), NULL, 0, (unsigned char *) key,
+                                     (unsigned char *) iv, strlen(iv), ciphertext, tag);
+    unsigned char out[ciphertext_len + GCM_TAG_SIZE];
+    //加密结果 ciphertext + tag
+    memcpy(out, ciphertext, ciphertext_len);
+    memcpy(out + ciphertext_len, tag, GCM_TAG_SIZE);
     //bytes转hex
     string base64Str = Base64Util::encode(reinterpret_cast<const char *>(out), sizeof(out));
     return base64Str;
 }
 
-string AesUtil::aes256gcmDecrypt(const void *key, const char *cipherBase64) {
+string AesUtil::aes256gcmDecrypt(const char *cipherBase64, const void *key, const char *iv) {
     //base64转bytes
-    string ciphertext = Base64Util::decode(cipherBase64, strlen(cipherBase64));
-    //加密结果 iv + ciphertext + tag
-    string ivStr = ciphertext.substr(0, GCM_IV_SIZE);
-    string cipherStr = ciphertext.substr(GCM_IV_SIZE,
-                                         ciphertext.length() - GCM_IV_SIZE - GCM_TAG_SIZE);
-    string tagStr = ciphertext.substr(ciphertext.length() - GCM_TAG_SIZE, GCM_TAG_SIZE);
+    string cipherAll = Base64Util::decode(cipherBase64, strlen(cipherBase64));
+    //加密结果 ciphertext + tag
+    string ciphertext = cipherAll.substr(0, cipherAll.length() - GCM_TAG_SIZE);
+    string tagStr = cipherAll.substr(cipherAll.length() - GCM_TAG_SIZE, GCM_TAG_SIZE);
     //解密后明文
-    char *plaintext[cipherStr.length()];
-    int plaintext_len = gcm_decrypt((unsigned char *) cipherStr.c_str(), cipherStr.length(), NULL,
-                                    0,
+    char *plaintext[ciphertext.length()];
+    int plaintext_len = gcm_decrypt((unsigned char *) ciphertext.c_str(), ciphertext.length(), NULL,0,
                                     (unsigned char *) tagStr.c_str(), (unsigned char *) key,
-                                    (unsigned char *) ivStr.c_str(), ivStr.length(), (unsigned char *) plaintext);
+                                    (unsigned char *) iv, strlen(iv), (unsigned char *) plaintext);
     string plainStr(reinterpret_cast<const char *>(plaintext), plaintext_len);
     return plainStr;
 }

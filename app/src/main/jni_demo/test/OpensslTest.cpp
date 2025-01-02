@@ -22,8 +22,9 @@ void OpensslTest::base64() {
 void OpensslTest::aes() {
     const char *str = "123abc";
     const char *key = "UY_R+2-3YJwfi*Kbs!E93NW(cF-WjuNX";
-    string aes256gcmEncrypt = AesUtil::aes256gcmEncrypt(key, str);
+    const char *iv = "123456789012";
+    string aes256gcmEncrypt = AesUtil::aes256gcmEncrypt(str, key, iv);
     LOGD("aes256gcmEncrypt: %s", aes256gcmEncrypt.c_str());
-    string aes256gcmDecrypt = AesUtil::aes256gcmDecrypt(key, aes256gcmEncrypt.c_str());
+    string aes256gcmDecrypt = AesUtil::aes256gcmDecrypt(aes256gcmEncrypt.c_str(), key, iv);
     LOGD("aes256gcmDecrypt: %s", aes256gcmDecrypt.c_str());
 }

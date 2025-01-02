@@ -14,13 +14,13 @@ public:
      * @param plaintext 明文
      * @return 16进制密文
      */
-    static string aes256gcmEncrypt(const void *key, const char *plaintext);
+    static string aes256gcmEncrypt(const char *plaintext, const void *key, const char *iv);
     /**
      * aes_256_gcm解密函数
      * @param ciphertext 密文base64编码
      * @return 明文
      */
-    static string aes256gcmDecrypt(const void *key, const char *cipherBase64);
+    static string aes256gcmDecrypt(const char *cipherBase64, const void *key, const char *iv);
 
 };
 

@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
         //网络请求
         binding.btnHttp.setOnClickListener(v -> {
-            binding.tv1.setText("curl发送get post请求，响应结果见日志。");
+            CommonUtil.toast("发送网络请求");
+            binding.tv1.setText("1.curl库发送get post请求，\n2.jsoncpp库处理json，\n结果见日志。");
             Demo.curlTest("");
         });
 

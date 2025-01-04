@@ -18,7 +18,7 @@ public class Demo {
     }
 
     public static native String curlTest(String value);
-    public static native String encryptTest(String value);
+    public static native String encryptTest(String plaintext, String key, String iv);
     public static native String typeTest(String value);
     public static native String test1(String value);
     //动态注册的方法

@@ -64,16 +64,16 @@ Java_org_freedesktop_demo_Demo_curlTest(JNIEnv *env, jclass thiz, jstring jstr) 
 
 //加解密
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_freedesktop_demo_Demo_encryptTest(JNIEnv *env, jclass thiz, jstring jstr) {
+Java_org_freedesktop_demo_Demo_encryptTest(JNIEnv *env, jclass thiz, jstring plaintextjstr, jstring keyjstr, jstring ivjstr) {
     //测试
     OpensslTest::base64();
     OpensslTest::aes();
     OpensslTest::sha();
     //aes256cbc加密
-    string str = JniUtil::jstringToString(env, jstr);
-    const char *key256 = "12345678901234567890123456789012";
-    const char *iv = "1234567890123456";
-    string aes256cbcEncrypt = AesUtil::aes256cbcEncrypt(str.c_str(), key256, iv);
+    string plaintext = JniUtil::jstringToString(env, plaintextjstr);
+    string key = JniUtil::jstringToString(env, keyjstr);
+    string iv = JniUtil::jstringToString(env, ivjstr);
+    string aes256cbcEncrypt = AesUtil::aes256cbcEncrypt(plaintext.c_str(), key.c_str(), iv.c_str());
     return env->NewStringUTF(aes256cbcEncrypt.c_str());
 }
 

@@ -32,29 +32,31 @@ public class MainActivity extends AppCompatActivity {
 
         //网络请求
         binding.btnHttp.setOnClickListener(v -> {
-            binding.tv1.setText("c++发送get post请求，响应结果见日志。");
+            binding.tv1.setText("curl发送get post请求，响应结果见日志。");
             Demo.curlTest("");
         });
 
         //加解密
         binding.btnEncrypt.setOnClickListener(v -> {
-            String value = "123abc";
-            String result = Demo.encryptTest(value);
-            binding.tv1.setText("aes256cbc加密:\n " + value + " => " + result + "\naes256gcm、aes256cbc、aes128ecb加解密，加密结果base64编码。\nsha1、hmacSHA256加密，加密结果转hex。结果见日志。");
+            String plaintext = "123abc";
+            String key = "12345678901234567890123456789012";
+            String iv = "1234567890123456";
+            String result = Demo.encryptTest(plaintext, key, iv);
+            binding.tv1.setText("aes256cbc加密:\n  明文: " + plaintext + "\n  密钥: " + key + "\n  偏移量: " + iv + "\n  结果: " + result + "\n更多加解密方式，见日志: \n  aes256gcm、aes256cbc、aes128ecb、\n  sha1、hmacSHA256");
         });
 
         //数据类型转换
         binding.btnType.setOnClickListener(v -> {
             String value = "123abc";
             String result = Demo.typeTest(value);
-            binding.tv1.setText("bytes转hex: " + value + " => " + result + "\nc++数据类型转换，结果见日志。");
+            binding.tv1.setText("bytes转hex:\n  " + value + " => " + result + "\n更多c++数据类型转换，见日志。");
         });
 
         //测试
         binding.btnTest.setOnClickListener(v -> {
             //动态注册的方法
             String result = Demo.registerNatives("123");
-            binding.tv1.setText("registerNatives: " + result);
+            binding.tv1.setText("1.JNI动态注册测试。");
 
         });
 

@@ -16,7 +16,7 @@ https://yadiq.github.io/2024/07/03/AndroidOpensslEncrypt/
 使用JsonCpp实现Json转string 和 string转Json
 使用curl实现 http get请求 和 post请求。
 2. 实现原理见博客
-https://yadiq.github.io/2024/07/03/AndroidCurlHttp/
+https://yadiq.github.io/2024/07/04/AndroidCurlHttp/
 
 ## 效果图
 

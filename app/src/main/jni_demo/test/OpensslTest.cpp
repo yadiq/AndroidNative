@@ -8,7 +8,7 @@
 #include "../utils_openssl/Base64Util.h"
 #include "../utils_android/LogUtil.h"
 #include "../utils_openssl/AesUtil.h"
-#include "../utils_openssl/ShaUtil.h"
+#include "../utils_openssl/HashUtil.h"
 
 using namespace std;
 
@@ -46,9 +46,9 @@ void OpensslTest::sha() {
     const char *str = "123abc";
     const char *key256 = "12345678901234567890123456789012";
 
-    string sha1Encrypt = ShaUtil::sha1Encrypt(str);
+    string sha1Encrypt = HashUtil::sha1Encrypt(str);
     LOGD("sha1Encrypt: %s", sha1Encrypt.c_str());
 
-    string hmacSHA256Encrypt = ShaUtil::hmacEncrypt("SHA256", str, key256);
+    string hmacSHA256Encrypt = HashUtil::hmacEncrypt("SHA256", str, key256);
     LOGD("hmacSHA256Encrypt: %s", hmacSHA256Encrypt.c_str());
 }

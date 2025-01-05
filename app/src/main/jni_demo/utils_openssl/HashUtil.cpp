@@ -4,12 +4,12 @@
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
 
-#include "ShaUtil.h"
+#include "HashUtil.h"
 
 //在线加解密 https://tool.oschina.net/encrypt?type=2
 //SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值。加密后20B
 //Sha1加密是不可逆的，网上虽然有解密的方法，但只能解密很简单的密码
-string ShaUtil::sha1Encrypt(const char *plaintext) {
+string HashUtil::sha1Encrypt(const char *plaintext) {
     char md[20];
     SHA1(reinterpret_cast<const unsigned char *>(plaintext), strlen(plaintext), reinterpret_cast<unsigned char *>(md));
     //转hex
@@ -24,7 +24,7 @@ string ShaUtil::sha1Encrypt(const char *plaintext) {
 //hmac("SHA384", msg, key);
 //hmac("SHA512", msg, key);
 //hmac("MD5", msg, key);
-string ShaUtil::hmacEncrypt(const char *algorithm, const char *plaintext, const char *key) {
+string HashUtil::hmacEncrypt(const char *algorithm, const char *plaintext, const char *key) {
     const EVP_MD *md = EVP_get_digestbyname(algorithm);
     if (md == NULL) {
         return "";

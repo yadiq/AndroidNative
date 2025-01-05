@@ -12,7 +12,7 @@ public:
     /**
      * aes_256_gcm加密函数
      * @param plaintext 明文
-     * @return 16进制密文
+     * @return 密文base64编码
      */
     static string aes256gcmEncrypt(const char *plaintext, const void *key, const char *iv);
     /**
@@ -25,7 +25,7 @@ public:
     /**
      * aes_256_cbc加密函数
      * @param plaintext 明文
-     * @return 16进制密文
+     * @return 密文base64编码
      */
     static string aes256cbcEncrypt(const char *plaintext, const void *key, const char *iv);
     /**
@@ -38,7 +38,7 @@ public:
     /**
      * aes_128_ecb加密函数
      * @param plaintext 明文
-     * @return 16进制密文
+     * @return 密文base64编码
  */
     static string aes128ecbEncrypt(const char *plaintext, const void *key);
     /**

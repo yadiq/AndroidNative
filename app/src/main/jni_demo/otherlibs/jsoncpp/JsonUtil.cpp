@@ -48,6 +48,3 @@ bool JsonUtil::stringToJson(char *value, Json::Value &json) {
     }
     return result;
 }
-
-//是否包含key
-//sdk.control_config.isMember("flashid")

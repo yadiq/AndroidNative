@@ -7,7 +7,6 @@
 
 #include <string>
 #include "json/json.h"
-
 using namespace std;
 
 class JsonUtil {
@@ -25,6 +24,12 @@ public:
      * @return 成功失败
      */
     static bool stringToJson(string& value, Json::Value& json);
+    /**
+     * cstring 转 Json::Value
+     * @param value
+     * @param json
+     * @return 成功失败
+     */
     static bool stringToJson(char* value, Json::Value& json);
 };
 

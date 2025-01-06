@@ -6,7 +6,7 @@
 
 string Util::byteToHex(char byte) {
     string str;
-    str.append(1, hex_char[byte >> 4]);
+    str.append(1, hex_char[(byte >> 4) & 0x0f]);//右移4位，然后用0填充前4位
     str.append(1, hex_char[byte & 0x0f]);
     return str;
 }

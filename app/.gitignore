@@ -1,5 +1,3 @@
-/build
-/*.apk
-/*.iml
+# /build
 /release
 /.cxx

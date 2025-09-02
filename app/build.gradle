@@ -1,17 +1,18 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
 }
 
 android {
     namespace 'com.hqumath.nativedemo' //影响R类生成
     //ndkVersion '21.4.7075529'//gstreamer指定版本21
-    compileSdk 29
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.hqumath.nativedemo" //影响AndroidManifest中package
         minSdk 21//so加固时限制21
         //noinspection ExpiredTargetSdkVersion
-        targetSdk 29
+        targetSdk 33
         versionCode 20241225
         versionName "1.0"
         //multiDexEnabled true
@@ -34,8 +35,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions{
+        jvmTarget = JavaVersion.VERSION_17
     }
     //配置自定义打包名称
     applicationVariants.all { variant ->
@@ -66,5 +70,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+
+    //kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

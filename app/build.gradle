@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.hqumath.nativedemo' //影响R类生成
-    //ndkVersion '21.4.7075529'//gstreamer指定版本21
+    ndkVersion '23.1.7779620'//AGP7.4对应
     compileSdk 33
 
     defaultConfig {
@@ -22,13 +22,27 @@ android {
             //abiFilters "x86"
             //abiFilters "x86_64"
         }
-        /*externalNativeBuild {
+        externalNativeBuild {
             cmake {
-                cppFlags "-std=c++11 -frtti -fexceptions"
-                //目标平台，若需要更多平台的请自行配置
+                //C++编译器标志
+                // -std,C++标准版本
+                // -frtti,启用运行时类型信息,需要RTTI时启用
+                // -fexceptions,启用异常处理,需要异常处理时启用
+                // -g,生成调试信息,Debug模式启用
+                // -O2,优化级别,Release模式使用
+                // -Wall,启用所有警告,推荐启用
+                // -Werror,将警告视为错误,严格模式启用
+                cppFlags "-std=c++14 -frtti -fexceptions"
+                //CMake参数
+                // -DANDROID_STL,选择STL 实现.c++_shared, c++_static, system, none
+                // -DCMAKE_BUILD_TYPE,构建类型.Debug, Release, RelWithDebInfo
+                // -DANDROID_PLATFORM,目标平台级别.android-21, android-24, 等
+                // -DANDROID_ARM_NEON,启用NEON优化. ON, OFF
+                arguments "-DANDROID_STL=c++_shared"
+                //可选：指定目标 ABI
                 //abiFilters 'armeabi'
             }
-        }*/
+        }
     }
     buildFeatures {
         viewBinding = true
@@ -64,6 +78,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('src/main/jni_demo/CMakeLists.txt')
+            version "3.18.1"  //CMake版本
         }
     }
 }

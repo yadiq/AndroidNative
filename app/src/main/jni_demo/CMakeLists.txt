@@ -1,6 +1,6 @@
 
-# CMAKE的最低版本。可以低于gradle中指定的版本
-cmake_minimum_required(VERSION 3.4.1)
+# CMAKE的最低版本。可以低于gradle中指定的版本，例如: 3.18.1, 3.10.2
+cmake_minimum_required(VERSION 3.18.1)
 
 # 获取目录下所有CPP的文件
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_PARENT "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")

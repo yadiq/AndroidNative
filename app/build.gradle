@@ -77,7 +77,7 @@ android {
     //cmake跨平台
     externalNativeBuild {
         cmake {
-            path file('src/main/jni_demo/CMakeLists.txt')
+            path file('src/main/cpp_demo/CMakeLists.txt')
             version "3.18.1"  //CMake版本
         }
     }

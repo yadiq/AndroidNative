@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.hqumath.nativedemo.base.BaseActivity
 import com.hqumath.nativedemo.databinding.ActivityMainBinding
 import com.hqumath.nativedemo.utils.CommonUtil
+import com.hqumath.nativedemo.utils.FileUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,6 +54,8 @@ class MainActivity : BaseActivity() {
 
     override fun initData() {
         CommonUtil.init(this)
+        //复制assets子文件夹到应用专属目录
+        FileUtil.copyAssetsDirToSDCard(mContext, "config")
     }
 
     override fun initViewObservable() {

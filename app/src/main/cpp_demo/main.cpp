@@ -16,21 +16,25 @@
 //jclass Java对象中的this,静态方法中使用
 
 //基本数据类型，不需要进行转换，可以直接在 JNI 中使用：
-//Java类型 Native类型 c类型           有无符合 字长
-//boolean jboolean   unsigned char   uint8_t
-//byte	  jbyte	     signed char     int8_t
-//char	  jchar	     unsigned short  uint16_t
-//short	  jshort	 signed short    int16_t
-//int	  jint	     int             int32_t
-//long	  jlong	     long            int64_t
-//float	  jfloat	 float           int32_t
-//double  jdouble	 double          int64_t
+//Java类型 Native类型 c类型           有无符号  JNI签名
+//boolean jboolean   unsigned char   uint8_t  Z
+//byte	  jbyte	     signed char     int8_t   B
+//char	  jchar	     unsigned short  uint16_t C
+//short	  jshort	 signed short    int16_t  S
+//int	  jint	     int             int32_t  I
+//long	  jlong	     long            int64_t  J
+//float	  jfloat	 float           int32_t  F
+//double  jdouble	 double          int64_t  D
+//void                                        V
 //注：java中char占两个字节，c中char占一个字节
 
 //非基本数据类型称为引用类型：
-//string  jstring    char*
-//int[]   jintArray  int*
-//byte[]  jbyteArray char*
+//int[]   jintArray  int*   [I
+//byte[]  jbyteArray char*  [B
+//String  jstring    char*  Ljava/lang/String;
+//Object  jobject           Ljava/lang/Object;
+//Class   jclass            Ljava/lang/Class;
+
 
 //jstring是指向JVM内部的一个字符串，不能直接使用，需转为char*后才能使用
 //Java中默认是使用UTF-16编码，C/C++默认使用UTF-8编码，需要进行编码转换

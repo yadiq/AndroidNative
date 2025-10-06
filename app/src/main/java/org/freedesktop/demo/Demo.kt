@@ -32,7 +32,10 @@ class Demo {
 
         //动态注册的方法
         @JvmStatic
-        external fun registerNatives(value: String): String
+        external fun set_param(storage_dir: String)
+
+        @JvmStatic
+        external fun start()
     }
 
     external fun thread1()

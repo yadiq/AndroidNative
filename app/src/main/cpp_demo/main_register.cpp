@@ -6,17 +6,37 @@
 #include "utils_android/JniUtil.h"
 #include "utils/Util.h"
 
-JNIEXPORT jstring JNICALL
-registerNatives(JNIEnv *env, jclass thiz, jstring jstr) {
-    string str = JniUtil::jstringToString(env, jstr);
-    string hex = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
-    jstring resultStr = env->NewStringUTF(hex.c_str());
-    return resultStr;
+//基本类型签名
+
+
+string storage_dir; //存储路径
+
+//JNIEXPORT jstring JNICALL
+//registerNatives(JNIEnv *env, jclass thiz, jstring jstr) {
+//    string str = JniUtil::jstringToString(env, jstr);
+//    string hex = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
+//    jstring resultStr = env->NewStringUTF(hex.c_str());
+//    return resultStr;
+//}
+
+//设置参数
+JNIEXPORT void JNICALL
+set_param(JNIEnv *env, jclass thiz, jstring storage_dir_) {
+    storage_dir = JniUtil::jstringToString(env,storage_dir_);
+}
+
+//开始运行
+JNIEXPORT void JNICALL
+start(JNIEnv *env, jclass thiz) {
+    //读取配置文件 TODO
+
 }
 
 //构建 JNINativeMethod 数组
 static JNINativeMethod methods[] = {
-        {"registerNatives", "(Ljava/lang/String;)Ljava/lang/String;", (void *) registerNatives},
+//        {"registerNatives", "(Ljava/lang/String;)Ljava/lang/String;", (void *) registerNatives},
+        {"set_param", "(Ljava/lang/String;)V", (void *) set_param},
+        {"start", "()V", (void *) start},
 };
 
 //动态注册的入口函数

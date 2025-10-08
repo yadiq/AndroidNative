@@ -14,13 +14,6 @@ file(GLOB_RECURSE SOURCE_CPP_FILES_OF_TEST "${CMAKE_CURRENT_SOURCE_DIR}/test/*.c
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_TEST_CURL "${CMAKE_CURRENT_SOURCE_DIR}/test_curl/*.cpp")
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_TEST_TYPE "${CMAKE_CURRENT_SOURCE_DIR}/test_type/*.cpp")
 
-# 指定头文件路径
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/openssl/include/
-        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/openssl/include/${ANDROID_ABI}/
-        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/curl/include/
-)
-
 # 添加动态库，指定库名称、类型、相对路径
 add_library(
         demo
@@ -33,6 +26,17 @@ add_library(
         ${SOURCE_CPP_FILES_OF_TEST}
         ${SOURCE_CPP_FILES_OF_TEST_CURL}
         ${SOURCE_CPP_FILES_OF_TEST_TYPE}
+)
+
+# 为目标指定头文件路径
+#PRIVATE：私有。仅当前目标使用，依赖此目标的其他目标看不到这些头文件路径
+#PUBLIC：公共。当前目标使用，依赖此目标的其他目标也能看到这些头文件路径
+#INTERFACE：接口。当前目标不使用，依赖此目标的其他目标能看到这些头文件路径
+target_include_directories(demo PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/openssl/include/
+        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/openssl/include/${ANDROID_ABI}/
+        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/curl/include/
+        ${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/json/
 )
 
 # 添加预编译的库，指定预编译的库的路径

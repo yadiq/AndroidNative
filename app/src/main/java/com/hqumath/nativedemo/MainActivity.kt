@@ -9,7 +9,6 @@ import com.hqumath.nativedemo.utils.CommonUtil
 import com.hqumath.nativedemo.utils.FileUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.freedesktop.demo.Demo
 
 class MainActivity : BaseActivity() {
@@ -47,15 +46,17 @@ class MainActivity : BaseActivity() {
         //测试
         binding.btnTest.setOnClickListener {
             //动态注册的方法
-            val result = Demo.registerNatives("123")
-            binding.tv1.text = "1.JNI动态注册测试。"
+//            val result = Demo.registerNatives("123")
+//            binding.tv1.text = "1.JNI动态注册测试。"
+            Demo.start()
         }
     }
 
     override fun initData() {
         CommonUtil.init(this)
         //复制assets子文件夹到应用专属目录
-        FileUtil.copyAssetsDirToSDCard(mContext, "config")
+        val filePath = FileUtil.copyAssetsDirToSDCard(mContext, "data")
+        Demo.set_param(filePath)
     }
 
     override fun initViewObservable() {

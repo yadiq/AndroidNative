@@ -142,10 +142,12 @@ public class FileUtil {
      * 应用专属目录: /storage/emulated/0/Android/data/packname/files
      * @param context
      * @param assetsDirName assets子文件夹名称
+     * @return 存储的目录
      */
-    public static void copyAssetsDirToSDCard(Context context, String assetsDirName) {
+    public static String copyAssetsDirToSDCard(Context context, String assetsDirName) {
         String filePath = context.getExternalFilesDir("").getAbsolutePath();
-        copyAssetsDirToSDCard(context, assetsDirName, filePath);
+        String result = copyAssetsDirToSDCard(context, assetsDirName, filePath);
+        return result;
     }
 
     /**
@@ -154,41 +156,38 @@ public class FileUtil {
      * @param context
      * @param assetsDirName assets子文件夹名称。""表示根目录(不建议,因为Android系统会自动打包进去一些隐藏资源)
      * @param filePath 指定目录。默认为应用专属外部存储空间 /storage/emulated/0/Android/data/packname/files
+     * @return 存储的目录
      */
-    public static void copyAssetsDirToSDCard(Context context, String assetsDirName, String filePath) {
+    public static String copyAssetsDirToSDCard(Context context, String assetsDirName, String filePath) {
+        //assetsDirName不能以/开头
+        if (assetsDirName.startsWith("/"))
+            assetsDirName = assetsDirName.substring(1);
+        //filePath不能以/结尾
+        if (filePath.endsWith("/"))
+            filePath = filePath.substring(0, filePath.length() - 1);
+        String result = filePath + File.separator + assetsDirName;
         try {
-            //assetsDirName不能以/开头
-            if (assetsDirName.startsWith("/"))
-                assetsDirName = assetsDirName.substring(1);
-            //filePath不能以/结尾
-            if (filePath.endsWith("/"))
-                filePath = filePath.substring(0, filePath.length() - 1);
             String list[] = context.getAssets().list(assetsDirName);
-            if (list.length == 0) {//文件
-                //创建文件
+            if (list.length == 0) {//复制文件
                 String fileName = assetsDirName;
                 if (assetsDirName.contains("/")) {
                     fileName = assetsDirName.substring(assetsDirName.lastIndexOf('/') + 1);
                 }
                 File file = new File(filePath + File.separator + fileName);
-                if (!file.exists()) {
+                if (!file.exists()) { //文件不存在时复制文件
                     file.createNewFile();
-                } else {
-                    return;
+                    InputStream inputStream = context.getAssets().open(assetsDirName);
+                    FileOutputStream fos = new FileOutputStream(file);
+                    int bt;
+                    byte[] mByte = new byte[1024];
+                    while ((bt = inputStream.read(mByte)) != -1) {
+                        fos.write(mByte, 0, bt);
+                    }
+                    fos.flush();
+                    inputStream.close();
+                    fos.close();
                 }
-                //复制文件
-                InputStream inputStream = context.getAssets().open(assetsDirName);
-                FileOutputStream fos = new FileOutputStream(file);
-                int bt;
-                byte[] mByte = new byte[1024];
-                while ((bt = inputStream.read(mByte)) != -1) {
-                    fos.write(mByte, 0, bt);
-                }
-                fos.flush();
-                inputStream.close();
-                fos.close();
-            } else {//文件夹
-                //创建文件夹
+            } else {//复制文件夹
                 String subDirName = assetsDirName;
                 if (assetsDirName.contains("/")) {
                     subDirName = assetsDirName.substring(assetsDirName.lastIndexOf('/') + 1);
@@ -206,5 +205,6 @@ public class FileUtil {
             e.printStackTrace();
             LogUtil.d("CopyAssets error path=" + assetsDirName);
         }
+        return result;
     }
 }

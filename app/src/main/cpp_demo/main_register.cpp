@@ -3,11 +3,14 @@
 // 动态注册
 
 #include <jni.h>
+#include <fstream>
+
 #include "utils_android/JniUtil.h"
 #include "utils/Util.h"
+#include "utils_android/LogUtil.h"
+#include "nlohmann/json.hpp"
 
-//基本类型签名
-
+using json = nlohmann::json;
 
 string storage_dir; //存储路径
 
@@ -29,6 +32,15 @@ set_param(JNIEnv *env, jclass thiz, jstring storage_dir_) {
 JNIEXPORT void JNICALL
 start(JNIEnv *env, jclass thiz) {
     //读取配置文件 TODO
+    string path = storage_dir + "/config.json5";
+    ifstream ifs(path); //打开文件
+    if (!ifs.is_open()) {
+        LOGD("无法打开文件 %s", path.c_str());
+    }
+    json j;
+    ifs >> j;
+    string str = j.dump(); //dump(4) 表示缩进 4 个空格
+    LOGD("str1 %s", str.c_str());
 
 }
 

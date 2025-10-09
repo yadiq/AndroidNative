@@ -25,6 +25,9 @@ private:
     ConfigManager();
     ~ConfigManager();
 
+//    static bool readJsonFile(const std::string& path, json& outJson) {
+
+
     // 禁止拷贝/赋值：保证全局只有一个实例。
     ConfigManager(const ConfigManager&) = delete;
     ConfigManager& operator=(const ConfigManager&) = delete;

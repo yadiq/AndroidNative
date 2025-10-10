@@ -1,14 +1,13 @@
 //
 // Created by Adi on 2025/10/8.
 //
+#include <fstream>
+#include <sstream>
 
 #include "ConfigManager.h"
 
 /**
- * 获取单例时，读文件到json （一个文件对应一个单例，一个函数对应一个层级的key）
- * 读key时，读json
- * 写key时，写json 写文件
- *
+ * 读写config文件
  * @return
  */
 
@@ -23,14 +22,40 @@ ConfigManager::ConfigManager() = default;
 
 ConfigManager::~ConfigManager() = default;
 
-void ConfigManager::setValue(const std::string &key, const std::string &value) {
-//    std::lock_guard<std::mutex> lock(mutex_);
-//    config_[key] = value;
+void ConfigManager::init(std::string &storageDir) {
+    path = storageDir + "/config.json5";
+    //读文件
+    std::ifstream ifs(path);
+    if (!ifs.is_open()) {
+        throw std::runtime_error("无法打开文件: " + path);
+    }
+    std::stringstream buffer;
+    buffer << ifs.rdbuf();
+    std::string json5Str = buffer.str();
+    //转为json
+    mJson = JsonUtil::json5StrToJson(json5Str);
 }
 
 std::string ConfigManager::getValue(const std::string &key) {
-//    std::lock_guard<std::mutex> lock(mutex_);
-//    auto it = config_.find(key);
-//    return (it != config_.end()) ? it->second : "";
-    return ""
+    std::string result;
+    if (mJson.contains(key)) {
+        result = mJson[key];
+    }
+    return result;
 }
+
+void ConfigManager::setValue(const std::string &key, const std::string &value) {
+    mJson[key] = value;
+    //转为string
+    std::string jsonStr = JsonUtil::jsonToStr(mJson);
+    //写文件
+    std::ofstream ofs(path);
+    if (!ofs.is_open()) {
+        throw std::runtime_error("无法写入文件: " + path);
+    }
+    ofs << jsonStr;
+}
+
+
+
+

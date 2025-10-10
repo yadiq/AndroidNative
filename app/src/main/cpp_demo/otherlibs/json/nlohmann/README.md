@@ -4,6 +4,7 @@
 #include <fstream>
 #include "utils_android/LogUtil.h"
 #include "nlohmann/json.hpp"
+
     //创建 JSON 对象
     json j;
     j["name"] = "Alice";
@@ -12,13 +13,13 @@
     j["skills"] = {"C++", "Python", "Qt"};
 
     //JSON 转 string
-    string str = j.dump(); //dump(4) 表示缩进 4 个空格
+    string str = j.dump(); //dump(2) 表示缩进 2 个空格
     LOGD("str1 %s", str.c_str());
 
     //访问字段
     //j["name"]
     //j["skills"][0]
-    //修改字段
+    //添加或修改字段
     //j["age"] = 26;
     //检查字段是否存在
     //if (j.contains("age"))

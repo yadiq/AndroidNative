@@ -6,27 +6,30 @@
 #define ANDROIDNATIVE_CONFIGMANAGER_H
 
 #include <string>
+#include "json_utils/JsonUtil.h"
 
-//using namespace std;
 
 class ConfigManager {
 public:
-    // 获取单例实例
+    //获取单例实例
     static ConfigManager& getInstance();
 
-    // 设置配置
-    void setValue(const std::string& key, const std::string& value);
+    //读文件，转为json，缓存起来
+    void init(std::string& storageDir);
 
-    // 获取配置
+    //获取配置
     std::string getValue(const std::string& key);
+
+    //设置配置
+    void setValue(const std::string& key, const std::string& value);
 
 private:
     // 私有构造函数和析构函数
     ConfigManager();
     ~ConfigManager();
 
-//    static bool readJsonFile(const std::string& path, json& outJson) {
-
+    json mJson; //JSON对象
+    std::string path; //文件路径
 
     // 禁止拷贝/赋值：保证全局只有一个实例。
     ConfigManager(const ConfigManager&) = delete;

@@ -1,7 +1,8 @@
 {
+  //年龄
   "age": 25,
   "is_student": false,
-  "name": "Alice",
+  "name": "Alice", /*姓名*/
   "skills": [
     "C++",
     "Python",

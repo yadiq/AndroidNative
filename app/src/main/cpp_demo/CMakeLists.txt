@@ -1,5 +1,5 @@
 
-# CMAKE的最低版本。可以低于gradle中指定的版本，例如: 3.18.1, 3.10.2
+# CMAKE的最低版本。可以低于gradle中指定的版本，例如: 3.22.1 3.18.1, 3.10.2
 cmake_minimum_required(VERSION 3.18.1)
 
 # 获取目录下所有CPP的文件

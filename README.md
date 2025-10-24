@@ -1,31 +1,39 @@
 # AndroidNative
 
-## 版本选择
-AGP7.4.2 Gradle7.6 JDK17 Kotlin1.9.22
+## 当前版本选择
+AGP8.10.1 Gradle8.11.1 JDK17 Kotlin2.1.20(K2编译器)
 
-NDK版本 23.1.7779620 
+NDK版本 27.0.12077973
 C++版本 C++14
+CMake版本 3.25.1
 
 1. AGP与NDK版本对应
-Android Studio版本	  AGP版本	默认NDK版本	备注
-Android Studio Hedgehog	8.3+	25.x/26.x	
-Android Studio Giraffe	8.0-8.2	25.x
-Android Studio Flamingo	7.4-7.5	23.x-24.x   #选择
-Android Studio Electric Eel	7.2-7.3	23.x-24.x
-Android Studio Dolphin	7.1-7.2	21.x-23.x
+AGP版本	默认NDK版本	备注
+8.10.1  27.0.x      #当前选择 NDK27.0.12077973
+8.3 	25.x/26.x	
+8.0-8.2	25.x
+7.4-7.5	23.x-24.x   
+7.2-7.3	23.x-24.x
+7.1-7.2	21.x-23.x
 2. NDK版本与C++版本对应
-NDK版本	 支持的C++标准	        默认标准	备注
-NDK r26+ C++17, C++14, C++11	C++17	
-NDK r23	 C++17, C++14, C++11	C++14   #选择
-NDK r21	 C++17, C++14, C++11	C++14
+NDK版本	 支持的C++标准	        
+r27   C++20 稳定 / C++23 部分实现
+r26   C++20 全面支持 / 实验性 C++23
+r25b  C++17 / 大部分 C++20
+r24   C++17 完整 / C++20 改进
+r23b  C++17 完整 / C++20 部分支持   
+r22b  C++17 / 部分 C++20
+r21e  C++17 / 实验性 C++20
 
-NDK版本	支持的最高CMake版本 推荐CMake版本 备注
-NDK r26+    3.22.1+	    3.22.1	
-NDK r25	    3.22.1	    3.22.1
-NDK r24	    3.21.1	    3.18.1
-NDK r23	    3.20.1	    3.18.1        #选择
-NDK r22	    3.19.6	    3.18.1
-NDK r21	    3.18.1	    3.18.1	
+3. NDK版本与CMake版本对应
+NDK版本 最低支持CMake版本 推荐CMake版本
+r27    3.22.1     3.25.1、3.27+   #当前选择 CMake3.25.1
+r26    3.18.1     3.22.1、3.25.1
+r25	   3.18.1	  3.22.1 或 3.23
+r24	   3.18.1	  3.22.1
+r23b   3.18.1	  3.22.1
+r22	   3.10.2     3.18.1
+r21	   3.10.2     3.18.1
 
 ## 介绍
 Android 原生开发。

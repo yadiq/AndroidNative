@@ -46,6 +46,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     compileOptions {
@@ -78,7 +79,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('src/main/cpp_demo/CMakeLists.txt')
-            version "3.25.1"  //CMake版本
+            version "3.22.1"  //CMake版本
         }
     }
 }

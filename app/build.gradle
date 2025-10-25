@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.hqumath.nativedemo' //影响R类生成
-    ndkVersion '27.0.12077973'
+    ndkVersion '25.2.9519653'
     compileSdk 33
 
     defaultConfig {
@@ -79,7 +79,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('src/main/cpp_demo/CMakeLists.txt')
-            version "3.30.3"  //CMake版本
+            version "3.22.1"  //CMake版本
         }
     }
 }

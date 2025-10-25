@@ -1,21 +1,76 @@
 # AndroidNative
 
-## 当前版本选择
-AGP8.10.1 Gradle8.11.1 JDK17 Kotlin2.1.20(K2编译器)
+## 当前版本选择(最佳性能,最新版本的速度更快)
+AGP8.10.1 Gradle8.11.1 NDK27.0.12077973 JDK17
+Kotlin2.1.20(K2编译器)
+C++版本 C++14
+CMake版本 3.30.3
 
-NDK版本 27.0.12077973
+## 旧版本选择(稳定兼容,长期支持版本)
+AGP7.4.2 Gradle7.6 NDK23.1 JDK11
+Kotlin1.9.22
 C++版本 C++14
 CMake版本 3.22.1
 
-1. AGP与NDK版本对应
-AGP版本	默认NDK版本	备注
-8.10.1  27.0.x      #当前选择 NDK27.0.12077973
-8.3 	25.x/26.x	
-8.0-8.2	25.x
-7.4-7.5	23.x-24.x   
-7.2-7.3	23.x-24.x
-7.1-7.2	21.x-23.x
-2. NDK版本与C++版本对应
+## 工具说明
+AGP   构建系统层。构建系统插件，协调所有编译任务
+CMake 构建工具层。负责生成本地 (Native) C/C++ 的编译规则
+NDK   编译工具链层。编译 C/C++ 代码
+
+
+## AGP发布信息
+[官方文档](https://developer.android.google.cn/build/releases/past-releases/agp-8-10-0-release-notes)
+1. AGP8.10
+子版本：8.10.0 8.10.1
+默认版本：Gradle8.11.1 SDK35.0 NDK27.0 JDK17
+
+2. AGP8.0
+子版本：8.0.0 8.0.1 8.0.2
+默认版本：Gradle8.0 SDK30.0 NDK25.1 JDK17
+
+3. AGP7.4
+子版本：7.4.0 7.4.1 7.4.2
+默认版本：Gradle7.5 SDK30.0 NDK23.1 JDK11
+
+4. AGP7.0
+子版本：7.0.0 7.0.1
+默认版本：Gradle7.0.2 SDK30.0 NDK21.4 JDK11
+
+## 版本对应关系
+[官方文档](https://developer.android.google.cn/build/releases/gradle-plugin?hl=zh-cn#updating-gradle)
+1. AGP 与 Gradle
++ AGP版本   最低Gradle版本
++ 8.13     8.13
++ 8.12     8.13
++ 8.11     8.13
++ 8.10     8.11.1  #当前选择8.10.1
+...
++ 8.6      8.7
++ 8.5      8.7
+...
++ 8.0      8.0
++ 7.4      7.5
+...
++ 7.0      7.0
++ 4.2.0+   6.7.1
+
+2. AGP 与 Android Studio 的版本对应关系
+AS版本                              支持AGP版本
+Narwhal 4 Feature Drop | 2025.1.4  4.0-8.13
+Narwhal 3 Feature Drop | 2025.1.3  4.0-8.13
+Narwhal Feature Drop | 2025.1.2	   4.0-8.12
+Narwhal | 2025.1.1	               3.2-8.11
+Meerkat Feature Drop | 2024.3.2	   3.2-8.10 #当前版本 2024.3.2 Patch 1
+Meerkat | 2024.3.1	               3.2-8.9
+Ladybug Feature Drop | 2024.2.2	   3.2-8.8
+
+3. CMake版本对应
+CMake版本  AGP版本    NDK      说明
++ 3.30.3  8.5~8.10  26b~27b   最新版本，并行性能最佳 #当前选择3.30.3
++ 3.22.1  7.4.x     23b~25c   长期支持版
++ 3.18.1  7.0~7.2   21e~23b   稳定版，兼容旧模块
+
+4. NDK版本与C++版本对应
 NDK版本	 支持的C++标准	        
 r27   C++20 稳定 / C++23 部分实现
 r26   C++20 全面支持 / 实验性 C++23
@@ -25,15 +80,8 @@ r23b  C++17 完整 / C++20 部分支持
 r22b  C++17 / 部分 C++20
 r21e  C++17 / 实验性 C++20
 
-3. NDK版本与CMake版本对应
-NDK版本 最低支持CMake版本 推荐CMake版本
-r27    3.22.1     3.25.1、3.27+   
-r26    3.18.1     3.22.1、3.25.1  #当前选择 CMake3.22.1
-r25	   3.18.1	  3.22.1 或 3.23
-r24	   3.18.1	  3.22.1
-r23b   3.18.1	  3.22.1
-r22	   3.10.2     3.18.1
-r21	   3.10.2     3.18.1
+
+
 
 ## 介绍
 Android 原生开发。

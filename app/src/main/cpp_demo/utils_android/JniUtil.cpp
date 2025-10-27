@@ -6,12 +6,12 @@
 
 //附加当前线程到虚拟机VM当中，向虚拟机分配线程独立的env，之后GetEnv返回的env才有值
 JNIEnv *JniUtil::getEnv(JavaVM *jvm) {
-    JNIEnv *env = NULL;
-    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_4);
+    JNIEnv *env = nullptr;
+    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
     if (status != JNI_OK) {
         status = jvm->AttachCurrentThread(&env, NULL);
         if(status != JNI_OK){
-            return NULL;
+            return nullptr;
         }
     }
     return env;
@@ -19,7 +19,7 @@ JNIEnv *JniUtil::getEnv(JavaVM *jvm) {
 
 void JniUtil::releaseEnv(JavaVM *jvm) {
     JNIEnv *env;
-    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_4);
+    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
     if (status == JNI_OK) {
         jvm->DetachCurrentThread();
     }

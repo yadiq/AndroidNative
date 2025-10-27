@@ -10,41 +10,37 @@ import com.hqumath.nativedemo.utils.LogUtil
  * 注意事项:
  * ****************************************************************
  */
-class Demo {
+class Demo private constructor(){
     ////////////////////////////////////native///////////////////////////////////
     companion object {
+        //加载 JNI 库，仅加载一次
         init {
             System.loadLibrary("crypto")
             System.loadLibrary("demo")
         }
 
+        //Kotlin 单例实现（懒加载 + 线程安全）
+        val instance: Demo by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            Demo()
+        }
+
         @JvmStatic //在java中和jni中调用可不加 Companion
-        external fun curlTest(value: String): String
+        external fun curlTest(value: String): String //测试网络请求
 
         @JvmStatic
-        external fun encryptTest(plaintext: String, key: String, iv: String): String
+        external fun encryptTest(plaintext: String, key: String, iv: String): String //测试加解密
 
         @JvmStatic
-        external fun typeTest(value: String): String
-
-        @JvmStatic
-        external fun test1(value: String): String
-
-        //动态注册的方法
-        @JvmStatic
-        external fun set_param(storage_dir: String)
-
-        @JvmStatic
-        external fun start()
+        external fun typeTest(value: String): String //测试数据类型转换
     }
 
-    external fun thread1()
-
-    private fun javaCallback(count: Int) {
-        LogUtil.e(TAG, "onNativeCallBack : $count")
-    }
+    external fun startThread(): Int //开始线程
+    external fun stopThread() //结束线程
+    external fun setCallback(callback: OnNativeCallback) //设置回调
 
     ////////////////////////////////////java///////////////////////////////////
-    private val TAG = "Native"
+    interface OnNativeCallback{
+        fun onInputEvent(type: Int)
 
+    }
 }

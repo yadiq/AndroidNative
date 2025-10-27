@@ -6,10 +6,11 @@ import androidx.lifecycle.lifecycleScope
 import com.hqumath.nativedemo.base.BaseActivity
 import com.hqumath.nativedemo.databinding.ActivityMainBinding
 import com.hqumath.nativedemo.utils.CommonUtil
-import com.hqumath.nativedemo.utils.FileUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.freedesktop.demo.Demo
+import org.freedesktop.demo.Demo.OnNativeCallback
+import kotlin.concurrent.thread
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -43,20 +44,37 @@ class MainActivity : BaseActivity() {
             val result = Demo.typeTest(value)
             binding.tv1.text = "bytes转hex:\n  $value => $result\n更多c++数据类型转换，见日志。"
         }
-        //测试
-        binding.btnTest.setOnClickListener {
-            //动态注册的方法
-//            val result = Demo.registerNatives("123")
-//            binding.tv1.text = "1.JNI动态注册测试。"
-            Demo.start()
+        //测试线程
+        binding.btnStartThread.setOnClickListener {
+            thread {
+                val result = Demo.instance.startThread()
+                binding.root.post {
+                    binding.tv1.text = "开始线程,result=$result"
+                }
+            }
+        }
+        binding.btnStopThread.setOnClickListener {
+            thread {
+                Demo.instance.stopThread()
+                binding.root.post {
+                    binding.tv1.text = "结束线程"
+                }
+            }
         }
     }
 
     override fun initData() {
         CommonUtil.init(this)
         //复制assets子文件夹到应用专属目录
-        val filePath = FileUtil.copyAssetsDirToSDCard(mContext, "data")
-        Demo.set_param(filePath)
+        //val filePath = FileUtil.copyAssetsDirToSDCard(mContext, "data")
+        //Demo.set_param(filePath)
+        Demo.instance.setCallback(object : OnNativeCallback {
+            override fun onInputEvent(type: Int) {
+                binding.root.post {
+                    binding.tv1.text = "运行中,value=$type"
+                }
+            }
+        })
     }
 
     override fun initViewObservable() {

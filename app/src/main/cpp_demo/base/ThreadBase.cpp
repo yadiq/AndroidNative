@@ -36,9 +36,9 @@ bool ThreadBase::isRunning() const {
     return m_running.load();
 }
 
-bool ThreadBase::shouldExit() const {
-    return !m_running.load();
-}
+//bool ThreadBase::shouldExit() const {
+//    return !m_running.load();
+//}
 
 void ThreadBase::threadEntry() {
     LOGD_TAG(TAG, "[%s] started", m_name.c_str());

@@ -32,12 +32,12 @@ protected:
     virtual void run() = 0;
 
     // 在线程执行函数中使用，用于判断是否需要退出
-    bool shouldExit() const;
+    //bool shouldExit() const;
 
     // 线程名称（可用于日志）
     std::string m_name;
 
-    const char* TAG = "Thread";
+    const char* TAG = "Thread"; //日志TAG
 
 private:
     // 线程入口包装函数

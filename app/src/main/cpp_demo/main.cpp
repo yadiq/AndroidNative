@@ -86,8 +86,8 @@ Java_org_freedesktop_demo_Demo_typeTest(JNIEnv *env, jclass thiz, jstring jstr) 
 }
 
 ///////////多线程
-JavaVM* gJvm = nullptr; //用于获取环境变量env
-jobject gCallback = nullptr; //用于获取callback
+JavaVM* gJvm = nullptr; //JniInterface使用，用于获取环境变量env
+jobject gCallback = nullptr; //JniInterface使用，用于获取callback
 
 ThreadTest* worker;
 

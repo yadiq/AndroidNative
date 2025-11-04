@@ -24,7 +24,7 @@ class MainActivity : BaseActivity() {
         //网络请求
         binding.btnHttp.setOnClickListener {
             CommonUtil.toast("发送网络请求")
-            binding.tv1.text = "1.curl库发送get post请求，\n2.jsoncpp库处理json，\n结果见日志。"
+            binding.tv1.text = "1.curl库发送get post请求，\n2.nlohmann库处理json，\n结果见日志。"
             lifecycleScope.launch(Dispatchers.IO) { //协程和生命周期能绑定
                 Demo.curlTest("")
             }

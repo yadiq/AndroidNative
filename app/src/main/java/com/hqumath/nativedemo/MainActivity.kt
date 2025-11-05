@@ -13,7 +13,8 @@ import org.freedesktop.demo.Demo.OnNativeListener
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var demo: Demo? = null
+//    private var demo: Demo? = null
+    private val list = mutableListOf<Demo>()
 
     override fun initContentView(savedInstanceState: Bundle?): View {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,24 +48,29 @@ class MainActivity : BaseActivity() {
         //测试线程
         binding.btnStartThread.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                demo?.init(object : OnNativeListener {
-                    override fun onInputEvent(type: Int) {
-                        TODO("Not yet implemented")
+                val demo = Demo()
+                list.add(demo)
+                demo.init(object : OnNativeListener {
+                    override fun onSetMessage(msg: String) {
+                        runOnUiThread {
+                            binding.tv1.text = "线程回调: $msg"
+                        }
                     }
                 })
             }
         }
         binding.btnStopThread.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                demo?.release()
+                for (item in list) {
+                    item.release()
+                }
+                list.clear()
             }
         }
     }
 
     override fun initData() {
         CommonUtil.init(this)
-
-        demo = Demo()
 
         //复制assets子文件夹到应用专属目录
         //val filePath = FileUtil.copyAssetsDirToSDCard(mContext, "data")

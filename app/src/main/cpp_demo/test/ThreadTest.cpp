@@ -9,11 +9,16 @@ ThreadTest::ThreadTest() : ThreadBase("ThreadTest"){
 }
 
 void ThreadTest::run() {
-    //while (!shouldExit()) {
     while (isRunning()) {
-        LOGD_TAG(TAG, "[%s] working...", m_name.c_str());
         std::this_thread::sleep_for(std::chrono::seconds(1)); //暂停当前线程
         num++;
-        mJniInterface.onInputEvent(num);
+        LOGD_TAG(TAG, "[%s] working, num=%d", m_name.c_str(), num);
+
+        //回调java层
+        JNIEnv *env = JniUtil::getJNIEnv(javaVM, threadKey);
+        if (env != nullptr) {
+            jstring msg = JniUtil::stringToJstring(env,to_string(num));
+            env->CallVoidMethod(app, nativeSetMessageFieldId, msg);
+        }
     }
 }

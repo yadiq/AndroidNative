@@ -5,24 +5,36 @@
 #include "JniUtil.h"
 
 //附加当前线程到虚拟机VM当中，向虚拟机分配线程独立的env，之后GetEnv返回的env才有值
-JNIEnv *JniUtil::getEnv(JavaVM *jvm) {
-    JNIEnv *env = nullptr;
-    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
-    if (status != JNI_OK) {
-        status = jvm->AttachCurrentThread(&env, NULL);
-        if(status != JNI_OK){
+//JNIEnv *JniUtil::getEnv(JavaVM *jvm) {
+//    JNIEnv *env = nullptr;
+//    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
+//    if (status != JNI_OK) {
+//        status = jvm->AttachCurrentThread(&env, NULL);
+//        if(status != JNI_OK){
+//            return nullptr;
+//        }
+//    }
+//    return env;
+//}
+//
+//void JniUtil::releaseEnv(JavaVM *jvm) {
+//    JNIEnv *env;
+//    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
+//    if (status == JNI_OK) {
+//        jvm->DetachCurrentThread();
+//    }
+//}
+//获取当前线程的JNI环境
+JNIEnv *JniUtil::getJNIEnv(JavaVM *javaVM, pthread_key_t threadKey) {
+    auto *env = (JNIEnv *) pthread_getspecific(threadKey);
+    if (env == nullptr && javaVM != nullptr) {
+        if (javaVM->AttachCurrentThread(&env, nullptr) == 0) {
+            pthread_setspecific(threadKey, env);
+        } else {
             return nullptr;
         }
     }
     return env;
-}
-
-void JniUtil::releaseEnv(JavaVM *jvm) {
-    JNIEnv *env;
-    int status = jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
-    if (status == JNI_OK) {
-        jvm->DetachCurrentThread();
-    }
 }
 
 string JniUtil::jstringToString(JNIEnv *env, jstring jstr) {

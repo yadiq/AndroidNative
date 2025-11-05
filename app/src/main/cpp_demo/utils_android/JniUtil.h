@@ -13,16 +13,13 @@ using namespace std;
 class JniUtil {
 public:
     /**
-     * 获取JNI环境
+     * 获取当前线程的JNI环境
      * @param jvm
+     * @param threadKey
      * @return
      */
-    static JNIEnv *getEnv(JavaVM *jvm);
-    /**
-     * 释放JNI环境
-     * @param jvm
-     */
-    static void releaseEnv(JavaVM *jvm);
+    static JNIEnv *getJNIEnv(JavaVM *javaVM, pthread_key_t threadKey);
+
     /**
      * jstring 转 string
      * @param env

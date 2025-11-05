@@ -4,7 +4,6 @@
 #include "utils/CurlHttp.h"
 #include "utils_android/JniUtil.h"
 #include "utils_android/LogUtil.h"
-#include "utils_android/JniInterface.h"
 #include "utils_openssl/AesUtil.h"
 #include "test/CurlTest.h"
 #include "test/TypeTest.h"
@@ -97,74 +96,72 @@ typeTest(JNIEnv *env, jclass thiz, jstring jstr) {
 //}
 
 /////////////主方法////////////
-//java侧的字段id
-static jfieldID nativeDataFieldId;
-static jmethodID nativeSetMessageFieldId;
-//
+//全局变量
+jfieldID nativeDataFieldId = nullptr;
+jmethodID nativeSetMessageFieldId = nullptr;
+JavaVM *javaVM = nullptr;
+pthread_key_t threadKey;
+jobject app = nullptr;
 
-JavaVM* javaVM = nullptr; //JniInterface使用，用于获取环境变量env
-jobject gCallback = nullptr; //JniInterface使用，用于获取callback
-
-//缓存java侧的字段id
+//类初始化，缓存java侧的字段id
 extern "C" JNIEXPORT void JNICALL
 nativeClassInit(JNIEnv *env, jclass thiz) {
     nativeDataFieldId = env->GetFieldID(thiz, "nativeData", "J");
     nativeSetMessageFieldId = env->GetMethodID(thiz, "setMessage", "(Ljava/lang/String;)V");
 }
 
-//开始线程
+//初始化
 extern "C" JNIEXPORT void JNICALL
 nativeInit(JNIEnv *env, jobject thiz) {
-    auto* worker = new ThreadTest();
-    env->SetLongField (thiz, nativeDataFieldId, reinterpret_cast<jlong>(worker)); //将指针保存到Java侧
+    app = env->NewGlobalRef(thiz); //保存类实例
+    auto *worker = new ThreadTest();
+    env->SetLongField(thiz, nativeDataFieldId, reinterpret_cast<jlong>(worker)); //将指针保存到Java侧
+
     worker->start();
 }
 
-//结束线程
+//释放
 extern "C" JNIEXPORT void JNICALL
 nativeRelease(JNIEnv *env, jobject thiz) {
     jlong ptr = env->GetLongField(thiz, nativeDataFieldId); //从java侧读取指针
     if (ptr == 0L) {
         return;
     }
-    auto* worker = reinterpret_cast<ThreadTest *>(ptr);
+    auto *worker = reinterpret_cast<ThreadTest *>(ptr);
     worker->stop();
+
+    //释放对象
+    env->DeleteGlobalRef(app);
     delete worker;
     env->SetLongField(thiz, nativeDataFieldId, 0L); // 清空指针
 }
 
-
-//设置回调
-//extern "C" JNIEXPORT void JNICALL
-//setCallback(JNIEnv *env, jobject thiz, jobject callback) {
-//    // 如果之前有回调对象，删除旧的全局引用
-//    if (gCallback != nullptr) {
-//        env->DeleteGlobalRef(gCallback);
-//        gCallback = nullptr;
-//    }
-//    // 创建新的全局引用（避免对象被 GC 回收）
-//    gCallback = env->NewGlobalRef(callback);
-//}
-
 //构建 JNINativeMethod 数组
 static JNINativeMethod methods[] = {
         /////////////工具类方法////////////
-        {"curlTest",    "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) curlTest},
-        {"encryptTest", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", (void *) encryptTest},
-        {"typeTest",    "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) typeTest},
+        {"curlTest",        "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) curlTest},
+        {"encryptTest",     "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", (void *) encryptTest},
+        {"typeTest",        "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) typeTest},
         /////////////主方法////////////
-        {"nativeClassInit", "()V", (void *) nativeClassInit},
-        {"nativeInit", "()V", (void *) nativeInit},
-        {"nativeRelease", "()V", (void *) nativeRelease},
-
-//        {"setCallback", "(Lorg/freedesktop/demo/Demo$OnNativeCallback;)V", (void *) setCallback},
+        {"nativeClassInit", "()V",                                                                        (void *) nativeClassInit},
+        {"nativeInit",      "()V",                                                                        (void *) nativeInit},
+        {"nativeRelease",   "()V",                                                                        (void *) nativeRelease},
+        //{"setCallback", "(Lorg/freedesktop/demo/Demo$OnNativeCallback;)V", (void *) setCallback},
 };
 
-//当动态库被加载时系统会调用
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
-    JNIEnv* env = nullptr;
+//线程退出时自动调用，从虚拟机中取消注册此线程
+void detachCurrentThread(void *env) {
+    if (javaVM != nullptr) {
+        javaVM->DetachCurrentThread();
+    }
+}
+
+//动态库 加载入口
+extern "C" JNIEXPORT jint JNICALL
+JNI_OnLoad(JavaVM *vm, void *reserved) {
+    JNIEnv *env = nullptr;
     //获取JNI env变量
-    if (vm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
+    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
         return JNI_ERR;
     }
     //获取native方法所在类
@@ -176,6 +173,14 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     if (env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0])) < 0) {
         return JNI_ERR;
     }
+
     javaVM = vm; //保存全局变量
+    pthread_key_create(&threadKey, detachCurrentThread); //存储线程本地数据,实现自动清理
     return JNI_VERSION_1_6;
+}
+
+//动态库 卸载入口
+extern "C" JNIEXPORT void JNICALL
+JNI_OnUnload(JavaVM *vm, void *reserved) {
+    pthread_key_delete(threadKey);
 }

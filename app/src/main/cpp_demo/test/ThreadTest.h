@@ -5,9 +5,10 @@
 #ifndef ANDROIDNATIVE_THREADTEST_H
 #define ANDROIDNATIVE_THREADTEST_H
 
+#include "../nativeGlobals.h"
 #include "../base/ThreadBase.h"
 #include "../utils_android/LogUtil.h"
-#include "../utils_android/JniInterface.h"
+#include "../utils_android/JniUtil.h"
 
 class ThreadTest : public ThreadBase {
 public:
@@ -17,7 +18,6 @@ protected:
     void run() override;
 
 private:
-    JniInterface mJniInterface;
     int num = 0;
 };
 

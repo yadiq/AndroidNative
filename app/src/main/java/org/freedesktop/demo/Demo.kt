@@ -52,8 +52,8 @@ class Demo {
 
     private val nativeData: Long = 0L //缓存c侧对象的指针
 
-    private fun setMessage(message: String) { //native回调，显示文本内容
-        LogUtil.d(TAG, "native回调数据: $message")
+    private fun setMessage(msg: String) { //native回调
+        listener?.onSetMessage(msg)
     }
 
     ////////////////////////////////////java///////////////////////////////////
@@ -69,6 +69,6 @@ class Demo {
     }
 
     interface OnNativeListener {
-        fun onInputEvent(type: Int)
+        fun onSetMessage(msg: String)
     }
 }

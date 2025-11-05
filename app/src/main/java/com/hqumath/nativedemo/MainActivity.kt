@@ -9,11 +9,11 @@ import com.hqumath.nativedemo.utils.CommonUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.freedesktop.demo.Demo
-import org.freedesktop.demo.Demo.OnNativeCallback
-import kotlin.concurrent.thread
+import org.freedesktop.demo.Demo.OnNativeListener
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var demo: Demo? = null
 
     override fun initContentView(savedInstanceState: Bundle?): View {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,35 +46,36 @@ class MainActivity : BaseActivity() {
         }
         //测试线程
         binding.btnStartThread.setOnClickListener {
-            thread {
-                val result = Demo.instance.startThread()
-                binding.root.post {
-                    binding.tv1.text = "开始线程,result=$result"
-                }
+            lifecycleScope.launch(Dispatchers.IO) {
+                demo?.init(object : OnNativeListener {
+                    override fun onInputEvent(type: Int) {
+                        TODO("Not yet implemented")
+                    }
+                })
             }
         }
         binding.btnStopThread.setOnClickListener {
-            thread {
-                Demo.instance.stopThread()
-                binding.root.post {
-                    binding.tv1.text = "结束线程"
-                }
+            lifecycleScope.launch(Dispatchers.IO) {
+                demo?.release()
             }
         }
     }
 
     override fun initData() {
         CommonUtil.init(this)
+
+        demo = Demo()
+
         //复制assets子文件夹到应用专属目录
         //val filePath = FileUtil.copyAssetsDirToSDCard(mContext, "data")
         //Demo.set_param(filePath)
-        Demo.instance.setCallback(object : OnNativeCallback {
-            override fun onInputEvent(type: Int) {
-                binding.root.post {
-                    binding.tv1.text = "运行中,value=$type"
-                }
-            }
-        })
+//        Demo.instance.setCallback(object : OnNativeCallback {
+//            override fun onInputEvent(type: Int) {
+//                binding.root.post {
+//                    binding.tv1.text = "运行中,value=$type"
+//                }
+//            }
+//        })
     }
 
     override fun initViewObservable() {

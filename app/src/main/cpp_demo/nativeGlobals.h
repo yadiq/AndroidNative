@@ -17,6 +17,6 @@ extern jmethodID nativeSetMessageFieldId; //回调函数
 
 extern JavaVM *javaVM; //JVM虚拟机实例
 extern pthread_key_t threadKey; //存储线程本地数据的key
-extern jobject app; //类实例，用来访问它的变量
+//extern jobject app; //类实例，用来访问它的变量
 
 #endif //ANDROIDNATIVE_NATIVEGLOBALS_H

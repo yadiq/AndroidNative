@@ -15,7 +15,7 @@ public:
     ThreadTest();
 
 protected:
-    void run() override;
+    void threadProc() override;
 
 private:
     int num = 0;

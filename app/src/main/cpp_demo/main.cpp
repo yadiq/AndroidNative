@@ -96,12 +96,17 @@ typeTest(JNIEnv *env, jclass thiz, jstring jstr) {
 //}
 
 /////////////主方法////////////
+//用结构体保存变量信息，传递给对象，以执行回调函数
+struct CustomData {
+    jobject app; //类实例，用来访问它的变量
+    ThreadTest *worker; //线程对象
+};
+
 //全局变量
 jfieldID nativeDataFieldId = nullptr;
 jmethodID nativeSetMessageFieldId = nullptr;
 JavaVM *javaVM = nullptr;
 pthread_key_t threadKey;
-jobject app = nullptr;
 
 //类初始化，缓存java侧的字段id
 extern "C" JNIEXPORT void JNICALL
@@ -113,27 +118,42 @@ nativeClassInit(JNIEnv *env, jclass thiz) {
 //初始化
 extern "C" JNIEXPORT void JNICALL
 nativeInit(JNIEnv *env, jobject thiz) {
-    app = env->NewGlobalRef(thiz); //保存类实例
+    //将指针保存到Java侧
+    auto *data = new CustomData();
+    env->SetLongField(thiz, nativeDataFieldId, reinterpret_cast<jlong>(data));
+    //保存变量
+    data->app = env->NewGlobalRef(thiz); //保存java类实例
     auto *worker = new ThreadTest();
-    env->SetLongField(thiz, nativeDataFieldId, reinterpret_cast<jlong>(worker)); //将指针保存到Java侧
+    data->worker = worker;
+    //开始线程
+    worker->startThread();
 
-    worker->start();
+//    LOGD("初始化，对象指针=%p", worker)
+//    LOGD("初始化，对象指针=%p", app)
 }
 
 //释放
 extern "C" JNIEXPORT void JNICALL
 nativeRelease(JNIEnv *env, jobject thiz) {
-    jlong ptr = env->GetLongField(thiz, nativeDataFieldId); //从java侧读取指针
+    //从java侧读取指针
+    jlong ptr = env->GetLongField(thiz, nativeDataFieldId);
     if (ptr == 0L) {
         return;
     }
-    auto *worker = reinterpret_cast<ThreadTest *>(ptr);
-    worker->stop();
+    auto *data = reinterpret_cast<CustomData *>(ptr);
 
+//    LOGD("释放，对象指针=%p", worker)
+//    LOGD("释放，对象指针=%p", app)
+
+    //结束线程
+    data->worker->stopThread();
     //释放对象
-    env->DeleteGlobalRef(app);
-    delete worker;
-    env->SetLongField(thiz, nativeDataFieldId, 0L); // 清空指针
+    env->DeleteGlobalRef(data->app);
+    data->app = nullptr;
+    delete data->worker;
+    data->worker = nullptr;
+    delete data;
+    env->SetLongField(thiz, nativeDataFieldId, 0L); //清空指针
 }
 
 //构建 JNINativeMethod 数组

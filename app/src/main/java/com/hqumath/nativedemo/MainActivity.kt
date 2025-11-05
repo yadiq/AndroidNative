@@ -14,7 +14,9 @@ import org.freedesktop.demo.Demo.OnNativeListener
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
 //    private var demo: Demo? = null
-    private val list = mutableListOf<Demo>()
+//    private val list = mutableListOf<Demo>()
+    private var demo1: Demo? = null
+    private var demo2: Demo? = null
 
     override fun initContentView(savedInstanceState: Bundle?): View {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -48,23 +50,56 @@ class MainActivity : BaseActivity() {
         //测试线程
         binding.btnStartThread.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                val demo = Demo()
-                list.add(demo)
-                demo.init(object : OnNativeListener {
+                if (demo1 == null) {
+                    demo1 = Demo()
+                    demo1?.init(object : OnNativeListener {
                     override fun onSetMessage(msg: String) {
                         runOnUiThread {
                             binding.tv1.text = "线程回调: $msg"
                         }
                     }
                 })
+                }
+//                val demo = Demo()
+//                list.add(demo)
+//                demo.init(object : OnNativeListener {
+//                    override fun onSetMessage(msg: String) {
+//                        runOnUiThread {
+//                            binding.tv1.text = "线程回调: $msg"
+//                        }
+//                    }
+//                })
             }
         }
         binding.btnStopThread.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                for (item in list) {
-                    item.release()
+                demo1?.release()
+                demo1 = null
+//                for (item in list) {
+//                    item.release()
+//                }
+//                list.clear()
+            }
+        }
+
+        binding.btnStartThread2.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                if (demo2 == null) {
+                    demo2 = Demo()
+                    demo2?.init(object : OnNativeListener {
+                        override fun onSetMessage(msg: String) {
+                            runOnUiThread {
+                                binding.tv2.text = "线程回调: $msg"
+                            }
+                        }
+                    })
                 }
-                list.clear()
+            }
+        }
+        binding.btnStopThread2.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                demo2?.release()
+                demo2 = null
             }
         }
     }

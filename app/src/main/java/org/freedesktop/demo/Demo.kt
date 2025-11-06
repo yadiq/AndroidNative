@@ -43,16 +43,12 @@ class Demo {
         external fun typeTest(value: String): String //测试数据类型转换
     }
 
-//    external fun startThread(): Int //开始线程
-//    external fun stopThread() //结束线程
-//    external fun setCallback(callback: OnNativeCallback) //设置回调
-
     private external fun nativeInit()
     private external fun nativeRelease()
 
     private val nativeData: Long = 0L //缓存c侧对象的指针
 
-    private fun setMessage(msg: String) { //native回调
+    private fun nativeSetMessage(msg: String) { //native回调
         listener?.onSetMessage(msg)
     }
 

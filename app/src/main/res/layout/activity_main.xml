@@ -48,27 +48,4 @@
         android:textColor="@color/black"
         tools:text="测试信息" />
 
-    <Button
-        android:id="@+id/btnStartThread2"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="开始线程2" />
-
-    <Button
-        android:id="@+id/btnStopThread2"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="结束线程2" />
-
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/tv2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        tools:text="测试信息" />
-
-
 </LinearLayout>

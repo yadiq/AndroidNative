@@ -8,7 +8,8 @@
 #include "test/CurlTest.h"
 #include "test/TypeTest.h"
 #include "test/OpensslTest.h"
-#include "test/ThreadTest.h"
+#include "test/MyHandle.h"
+#include "nativeGlobals.h"
 
 
 //基本数据类型，不需要进行转换，可以直接在 JNI 中使用：
@@ -96,12 +97,6 @@ typeTest(JNIEnv *env, jclass thiz, jstring jstr) {
 //}
 
 /////////////主方法////////////
-//用结构体保存变量信息，传递给对象，以执行回调函数
-struct CustomData {
-    jobject app; //类实例，用来访问它的变量
-    ThreadTest *worker; //线程对象
-};
-
 //全局变量
 jfieldID nativeDataFieldId = nullptr;
 jmethodID nativeSetMessageFieldId = nullptr;
@@ -112,7 +107,7 @@ pthread_key_t threadKey;
 extern "C" JNIEXPORT void JNICALL
 nativeClassInit(JNIEnv *env, jclass thiz) {
     nativeDataFieldId = env->GetFieldID(thiz, "nativeData", "J");
-    nativeSetMessageFieldId = env->GetMethodID(thiz, "setMessage", "(Ljava/lang/String;)V");
+    nativeSetMessageFieldId = env->GetMethodID(thiz, "nativeSetMessage", "(Ljava/lang/String;)V");
 }
 
 //初始化
@@ -123,16 +118,13 @@ nativeInit(JNIEnv *env, jobject thiz) {
     env->SetLongField(thiz, nativeDataFieldId, reinterpret_cast<jlong>(data));
     //保存变量
     data->app = env->NewGlobalRef(thiz); //保存java类实例
-    auto *worker = new ThreadTest();
-    data->worker = worker;
+    auto *myHandle = new MyHandle(data->app);
+    data->myHandle = myHandle;
     //开始线程
-    worker->startThread();
-
-//    LOGD("初始化，对象指针=%p", worker)
-//    LOGD("初始化，对象指针=%p", app)
+    myHandle->startThread();
 }
 
-//释放
+//释放（执行速度慢，避免重复操作）
 extern "C" JNIEXPORT void JNICALL
 nativeRelease(JNIEnv *env, jobject thiz) {
     //从java侧读取指针
@@ -141,17 +133,13 @@ nativeRelease(JNIEnv *env, jobject thiz) {
         return;
     }
     auto *data = reinterpret_cast<CustomData *>(ptr);
-
-//    LOGD("释放，对象指针=%p", worker)
-//    LOGD("释放，对象指针=%p", app)
-
     //结束线程
-    data->worker->stopThread();
+    data->myHandle->stopThread();
     //释放对象
     env->DeleteGlobalRef(data->app);
     data->app = nullptr;
-    delete data->worker;
-    data->worker = nullptr;
+    delete data->myHandle;
+    data->myHandle = nullptr;
     delete data;
     env->SetLongField(thiz, nativeDataFieldId, 0L); //清空指针
 }

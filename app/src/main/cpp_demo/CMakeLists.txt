@@ -1,27 +1,30 @@
 
 # CMAKE的最低版本。可以低于gradle中指定的版本，例如: 3.22.1 3.18.1, 3.10.2
 cmake_minimum_required(VERSION 3.18.1)
+# 工程名称，工程初始化点
+project(myLib)
 
 # 获取目录下所有CPP的文件
-file(GLOB_RECURSE SOURCE_CPP_FILES_OF_PARENT "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+# GLOB 当前目录; GLOB_RECURSE 包含子目录
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_BASE "${CMAKE_CURRENT_SOURCE_DIR}/base/*.cpp")
+file(GLOB_RECURSE SOURCE_CPP_FILES_OF_JSON "${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/json/*.cpp")
+file(GLOB_RECURSE SOURCE_CPP_FILES_OF_TEST "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/utils/*.cpp")
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_UTILS_ANDROID "${CMAKE_CURRENT_SOURCE_DIR}/utils_android/*.cpp")
 file(GLOB_RECURSE SOURCE_CPP_FILES_OF_UTILS_OPENSSL "${CMAKE_CURRENT_SOURCE_DIR}/utils_openssl/*.cpp")
-file(GLOB_RECURSE SOURCE_CPP_FILES_OF_JSON "${CMAKE_CURRENT_SOURCE_DIR}/otherlibs/json/json_utils/*.cpp")
-file(GLOB_RECURSE SOURCE_CPP_FILES_OF_TEST "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
+
 
 # 添加动态库，指定库名称、类型、相对路径
 add_library(
         demo
         SHARED
-        ${SOURCE_CPP_FILES_OF_PARENT}
         ${SOURCE_CPP_FILES_OF_BASE}
+        ${SOURCE_CPP_FILES_OF_JSON}
+        ${SOURCE_CPP_FILES_OF_TEST}
         ${SOURCE_CPP_FILES_OF_UTILS}
         ${SOURCE_CPP_FILES_OF_UTILS_ANDROID}
         ${SOURCE_CPP_FILES_OF_UTILS_OPENSSL}
-        ${SOURCE_CPP_FILES_OF_JSON}
-        ${SOURCE_CPP_FILES_OF_TEST}
+        main.cpp
 )
 
 # 为目标指定头文件路径

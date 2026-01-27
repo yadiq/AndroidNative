@@ -3,8 +3,8 @@
 //
 
 #include "JsoncppUtil.h"
-#include "jsoncpp/json/reader.h"
-#include "jsoncpp/json/writer.h"
+#include "jsoncpp/include//reader.h"
+#include "jsoncpp/include/writer.h"
 
 std::string JsoncppUtil::jsonToString(Json::Value& json) {
     Json::FastWriter fwriter;//转化器-json压缩

@@ -6,7 +6,7 @@
 #define ANDROIDNATIVE_JSONCPPUTIL_H
 
 
-#include "jsoncpp/json/value.h"
+#include "jsoncpp/include//value.h"
 
 class JsoncppUtil {
 public:

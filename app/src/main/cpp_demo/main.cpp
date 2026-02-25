@@ -1,16 +1,15 @@
 #include <jni.h>
 
 #include "utils/Util.h"
-#include "utils/CurlHttp.h"
 #include "utils_android/JniUtil.h"
 #include "utils_android/LogUtil.h"
-#include "utils_openssl/AesUtil.h"
-#include "test/CurlTest.h"
 #include "test/TypeTest.h"
-#include "test/OpensslTest.h"
 #include "test/MyHandle.h"
 #include "nativeGlobals.h"
 
+extern "C" {
+#include <libavutil/avutil.h>
+}
 
 //基本数据类型，不需要进行转换，可以直接在 JNI 中使用：
 //Java类型 Native类型 c类型           有无符号  JNI签名
@@ -49,28 +48,9 @@
 //测试网络请求
 extern "C" JNIEXPORT jstring JNICALL
 curlTest(JNIEnv *env, jclass thiz, jstring jstr) {
-    string str = JniUtil::jstringToString(env, jstr);
-    CurlHttp::init(); //初始化
-    CurlTest curlTest;
-    curlTest.curlGet();
-    curlTest.curlPost();
-    CurlHttp::cleanup(); //清理
-    return env->NewStringUTF(str.c_str());
-}
-
-//测试加解密
-extern "C" JNIEXPORT jstring JNICALL
-encryptTest(JNIEnv *env, jclass thiz, jstring plaintextjstr, jstring keyjstr, jstring ivjstr) {
-    //测试
-    OpensslTest::base64();
-    OpensslTest::aes();
-    OpensslTest::sha();
-    //aes256cbc加密
-    string plaintext = JniUtil::jstringToString(env, plaintextjstr);
-    string key = JniUtil::jstringToString(env, keyjstr);
-    string iv = JniUtil::jstringToString(env, ivjstr);
-    string aes256cbcEncrypt = AesUtil::aes256cbcEncrypt(plaintext.c_str(), key.c_str(), iv.c_str());
-    return env->NewStringUTF(aes256cbcEncrypt.c_str());
+    //ffmpeg
+    std::string hello = "Hello from ffmpeg: " + std::string(av_version_info());
+    return env->NewStringUTF(hello.c_str());
 }
 
 //测试数据类型转换
@@ -84,17 +64,6 @@ typeTest(JNIEnv *env, jclass thiz, jstring jstr) {
     string result = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
     return env->NewStringUTF(result.c_str());
 }
-
-//json配置文件
-//JNIEXPORT void JNICALL
-//start(JNIEnv *env, jclass thiz, jstring storage_dir_) {
-//    string storage_dir = JniUtil::jstringToString(env,storage_dir_);
-//    //读取配置文件
-//    ConfigManager::getInstance().init(storage_dir);
-//    ConfigManager::getInstance().setValue("name", "小王");
-//    string name = ConfigManager::getInstance().getValue("name");
-//    LOGD("读取name, %s", name.c_str());
-//}
 
 /////////////主方法////////////
 //全局变量
@@ -148,7 +117,6 @@ nativeRelease(JNIEnv *env, jobject thiz) {
 static JNINativeMethod methods[] = {
         /////////////工具类方法////////////
         {"curlTest",        "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) curlTest},
-        {"encryptTest",     "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", (void *) encryptTest},
         {"typeTest",        "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) typeTest},
         /////////////主方法////////////
         {"nativeClassInit", "()V",                                                                        (void *) nativeClassInit},

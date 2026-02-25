@@ -27,20 +27,13 @@ class MainActivity : BaseActivity() {
     override fun initListener() {
         //网络请求
         binding.btnHttp.setOnClickListener {
-            CommonUtil.toast("发送网络请求")
-            binding.tv1.text = "1.curl库发送get post请求，\n2.nlohmann库处理json，\n结果见日志。"
-            lifecycleScope.launch(Dispatchers.IO) { //协程和生命周期能绑定
-                Demo.curlTest("")
-            }
-        }
-        //加解密
-        binding.btnEncrypt.setOnClickListener {
-            val plaintext = "123abc"
-            val key = "12345678901234567890123456789012"
-            val iv = "1234567890123456"
-            val result = Demo.encryptTest(plaintext, key, iv)
-            binding.tv1.text =
-                "aes256cbc加密:\n  明文: $plaintext\n  密钥: $key\n  偏移量: $iv\n  结果: $result\n更多加解密方式，见日志: \n  aes256gcm、aes256cbc、aes128ecb、\n  sha1、hmacSHA256"
+//            CommonUtil.toast("发送网络请求")
+//            binding.tv1.text = "1.curl库发送get post请求，\n2.nlohmann库处理json，\n结果见日志。"
+//            lifecycleScope.launch(Dispatchers.IO) { //协程和生命周期能绑定
+//                Demo.curlTest("")
+//            }
+            val msg = Demo.curlTest("")
+            binding.btnHttp.text = msg
         }
         //数据类型转换
         binding.btnType.setOnClickListener {

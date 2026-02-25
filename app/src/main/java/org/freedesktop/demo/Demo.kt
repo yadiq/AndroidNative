@@ -17,10 +17,8 @@ class Demo {
     companion object {
         //加载JNI库，仅加载一次
         init {
-            System.loadLibrary("crypto")
             System.loadLibrary("demo")
             nativeClassInit()
-
         }
 
         //Kotlin 单例实现（懒加载 + 线程安全）
@@ -35,9 +33,6 @@ class Demo {
         /////////////工具类方法////////////
         @JvmStatic
         external fun curlTest(value: String): String //测试网络请求
-
-        @JvmStatic
-        external fun encryptTest(plaintext: String, key: String, iv: String): String //测试加解密
 
         @JvmStatic
         external fun typeTest(value: String): String //测试数据类型转换

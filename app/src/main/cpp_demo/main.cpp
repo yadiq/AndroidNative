@@ -6,6 +6,7 @@
 #include "test/TypeTest.h"
 #include "test/MyHandle.h"
 #include "nativeGlobals.h"
+#include "test/Player.h"
 
 extern "C" {
 #include <libavutil/avutil.h>
@@ -47,23 +48,23 @@ extern "C" {
 /////////////工具类方法////////////
 //测试网络请求
 extern "C" JNIEXPORT jstring JNICALL
-curlTest(JNIEnv *env, jclass thiz, jstring jstr) {
+test(JNIEnv *env, jclass thiz, jstring jstr) {
     //ffmpeg
     std::string hello = "Hello from ffmpeg: " + std::string(av_version_info());
     return env->NewStringUTF(hello.c_str());
 }
 
 //测试数据类型转换
-extern "C" JNIEXPORT jstring JNICALL
-typeTest(JNIEnv *env, jclass thiz, jstring jstr) {
-    //测试
-    TypeTest::pintTypeSize();
-    TypeTest::typeCast();
-    //bytes转hex
-    string str = JniUtil::jstringToString(env, jstr);
-    string result = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
-    return env->NewStringUTF(result.c_str());
-}
+//extern "C" JNIEXPORT jstring JNICALL
+//typeTest(JNIEnv *env, jclass thiz, jstring jstr) {
+//    //测试
+//    TypeTest::pintTypeSize();
+//    TypeTest::typeCast();
+//    //bytes转hex
+//    string str = JniUtil::jstringToString(env, jstr);
+//    string result = Util::bytesToHex(const_cast<char *>(str.c_str()), str.length());
+//    return env->NewStringUTF(result.c_str());
+//}
 
 /////////////主方法////////////
 //全局变量
@@ -79,50 +80,82 @@ nativeClassInit(JNIEnv *env, jclass thiz) {
     nativeSetMessageFieldId = env->GetMethodID(thiz, "nativeSetMessage", "(Ljava/lang/String;)V");
 }
 
-//初始化
+////初始化
+//extern "C" JNIEXPORT void JNICALL
+//nativeInit(JNIEnv *env, jobject thiz) {
+//    //将指针保存到Java侧
+//    auto *data = new CustomData();
+//    env->SetLongField(thiz, nativeDataFieldId, reinterpret_cast<jlong>(data));
+//    //保存变量
+//    data->app = env->NewGlobalRef(thiz); //保存java类实例
+//    auto *myHandle = new MyHandle(data->app);
+//    data->myHandle = myHandle;
+//    //开始线程
+//    myHandle->startThread();
+//}
+//
+////释放（执行速度慢，避免重复操作）
+//extern "C" JNIEXPORT void JNICALL
+//nativeRelease(JNIEnv *env, jobject thiz) {
+//    //从java侧读取指针
+//    jlong ptr = env->GetLongField(thiz, nativeDataFieldId);
+//    if (ptr == 0L) {
+//        return;
+//    }
+//    auto *data = reinterpret_cast<CustomData *>(ptr);
+//    //结束线程
+//    data->myHandle->stopThread();
+//    //释放对象
+//    env->DeleteGlobalRef(data->app);
+//    data->app = nullptr;
+//    delete data->myHandle;
+//    data->myHandle = nullptr;
+//    delete data;
+//    env->SetLongField(thiz, nativeDataFieldId, 0L); //清空指针
+//}
+
+static Player *player = nullptr;
+
+//播放
 extern "C" JNIEXPORT void JNICALL
-nativeInit(JNIEnv *env, jobject thiz) {
-    //将指针保存到Java侧
-    auto *data = new CustomData();
-    env->SetLongField(thiz, nativeDataFieldId, reinterpret_cast<jlong>(data));
-    //保存变量
-    data->app = env->NewGlobalRef(thiz); //保存java类实例
-    auto *myHandle = new MyHandle(data->app);
-    data->myHandle = myHandle;
-    //开始线程
-    myHandle->startThread();
+play(JNIEnv *env, jobject thiz, jstring jstr) {
+    string str = JniUtil::jstringToString(env, jstr);
+    if (!player)
+        player = new Player();
+
+    LOGD("play url= %s", str.c_str());
+    player->start(str.c_str());
 }
 
-//释放（执行速度慢，避免重复操作）
+//结束
 extern "C" JNIEXPORT void JNICALL
-nativeRelease(JNIEnv *env, jobject thiz) {
-    //从java侧读取指针
-    jlong ptr = env->GetLongField(thiz, nativeDataFieldId);
-    if (ptr == 0L) {
-        return;
-    }
-    auto *data = reinterpret_cast<CustomData *>(ptr);
-    //结束线程
-    data->myHandle->stopThread();
-    //释放对象
-    env->DeleteGlobalRef(data->app);
-    data->app = nullptr;
-    delete data->myHandle;
-    data->myHandle = nullptr;
-    delete data;
-    env->SetLongField(thiz, nativeDataFieldId, 0L); //清空指针
+stop(JNIEnv *env, jobject thiz) {
+    if (player)
+        player->stop();
+}
+
+//设置画布
+extern "C" JNIEXPORT void JNICALL
+setSurface(JNIEnv *env, jobject thiz, jobject surface) {
+    if (!player)
+        player = new Player();
+
+    player->setSurface(env, surface);
 }
 
 //构建 JNINativeMethod 数组
 static JNINativeMethod methods[] = {
         /////////////工具类方法////////////
-        {"curlTest",        "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) curlTest},
-        {"typeTest",        "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) typeTest},
+        {"test", "(Ljava/lang/String;)Ljava/lang/String;", (void *) test},
+//        {"typeTest", "(Ljava/lang/String;)Ljava/lang/String;", (void *) typeTest},
         /////////////主方法////////////
-        {"nativeClassInit", "()V",                                                                        (void *) nativeClassInit},
-        {"nativeInit",      "()V",                                                                        (void *) nativeInit},
-        {"nativeRelease",   "()V",                                                                        (void *) nativeRelease},
+        {"nativeClassInit", "()V", (void *) nativeClassInit},
+//        {"nativeInit", "()V", (void *) nativeInit},
+//        {"nativeRelease", "()V", (void *) nativeRelease},
         //{"setCallback", "(Lorg/freedesktop/demo/Demo$OnNativeCallback;)V", (void *) setCallback},
+        {"play", "(Ljava/lang/String;)V", (void *) play},
+        {"stop", "()V", (void *) stop},
+        {"setSurface", "(Landroid/view/Surface;)V", (void *) setSurface},
 };
 
 //线程退出时自动调用，从虚拟机中取消注册此线程

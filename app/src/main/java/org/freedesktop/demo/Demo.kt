@@ -1,5 +1,6 @@
 package org.freedesktop.demo
 
+import android.view.Surface
 import com.hqumath.nativedemo.utils.LogUtil
 
 /**
@@ -32,14 +33,14 @@ class Demo {
 
         /////////////工具类方法////////////
         @JvmStatic
-        external fun curlTest(value: String): String //测试网络请求
-
-        @JvmStatic
-        external fun typeTest(value: String): String //测试数据类型转换
+        external fun test(value: String): String //测试
     }
 
-    private external fun nativeInit()
-    private external fun nativeRelease()
+//    private external fun nativeInit()
+//    private external fun nativeRelease()
+    external fun play(url: String)
+    external fun stop()
+    external fun setSurface(surface: Surface)
 
     private val nativeData: Long = 0L //缓存c侧对象的指针
 
@@ -50,14 +51,14 @@ class Demo {
     ////////////////////////////////////java///////////////////////////////////
     private var listener: OnNativeListener? = null
 
-    fun init(listener: OnNativeListener) {
-        this.listener = listener
-        nativeInit()
-    }
-
-    fun release() {
-        nativeRelease()
-    }
+//    fun init(listener: OnNativeListener) {
+//        this.listener = listener
+//        nativeInit()
+//    }
+//
+//    fun release() {
+//        nativeRelease()
+//    }
 
     interface OnNativeListener {
         fun onSetMessage(msg: String)

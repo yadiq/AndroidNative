@@ -84,6 +84,7 @@ class MainActivity : BaseActivity() {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 demo?.setSurface(holder.surface)
                 demo?.play("rtmp://192.168.0.32:1935/live/stream")
+//                demo?.play("rtmp://ns8.indexforce.com/home/mystream")
             }
 
             override fun surfaceChanged(

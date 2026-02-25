@@ -35,10 +35,11 @@ void Player::start(const char *url) {
         av_log_set_callback(ffmpeg_log_callback);
 
         //初始化网络
+        av_register_all();
         avformat_network_init();
 
         //设置低延迟参数
-        AVDictionary *opts = nullptr;
+//        AVDictionary *opts = nullptr;
 //        av_dict_set(&opts, "fflags", "nobuffer", 0);
 //        av_dict_set(&opts, "rtmp_live", "live", 0);
 //        av_dict_set(&opts, "max_delay", "0", 0);      // 单位微秒
@@ -49,7 +50,7 @@ void Player::start(const char *url) {
 
         LOGD("avformat_open_input: %s", url);
         AVFormatContext *fmt = nullptr;
-        int ret = avformat_open_input(&fmt, url, nullptr, &opts);
+        int ret = avformat_open_input(&fmt, url, nullptr, nullptr);
         if (ret < 0) {
             char errbuf[256];
             av_strerror(ret, errbuf, sizeof(errbuf));

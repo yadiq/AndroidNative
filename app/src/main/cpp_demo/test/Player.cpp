@@ -38,19 +38,26 @@ void Player::start(const char *url) {
         av_register_all();
         avformat_network_init();
 
-        //设置低延迟参数
+        //网络缓冲和延迟
+        AVDictionary *opts = NULL;
+        av_dict_set(&opts, "rtmp_live", "live", 0);   // 用于直播拉流
+        av_dict_set(&opts, "max_delay", "500000", 0); // 最大延迟 0.5s
+        av_dict_set(&opts, "buffer_size", "1024000", 0); // TCP buffer 1MB
 //        AVDictionary *opts = nullptr;
 //        av_dict_set(&opts, "fflags", "nobuffer", 0);
 //        av_dict_set(&opts, "rtmp_live", "live", 0);
 //        av_dict_set(&opts, "max_delay", "0", 0);      // 单位微秒
 //        av_dict_set(&opts, "timeout", "5000000", 0);  // 5秒超时
 //        av_dict_set(&opts, "buffer_size", "1024000", 0);
-//        av_dict_set(&opts, "rtmp_live", "live", 0);
-//        av_dict_set(&opts, "buffer_size", "1024000", 0);
+//        av_dict_set(&opts, "rtmp_transport", "tcp", 0); //强制使用 TCP
+        av_dict_set(&opts, "rtmp_buffer", "1000", 0); // buffer 1s
+        av_dict_set(&opts, "stimeout", "5000000", 0);  // 5s 超时
+        av_dict_set(&opts, "fflags", "nobuffer", 0);
+        av_dict_set(&opts, "flags", "low_delay", 0);
 
         LOGD("avformat_open_input: %s", url);
         AVFormatContext *fmt = nullptr;
-        int ret = avformat_open_input(&fmt, url, nullptr, nullptr);
+        int ret = avformat_open_input(&fmt, url, nullptr, &opts);
         if (ret < 0) {
             char errbuf[256];
             av_strerror(ret, errbuf, sizeof(errbuf));
@@ -74,6 +81,10 @@ void Player::start(const char *url) {
         AVCodecContext *codecCtx = avcodec_alloc_context3(codec);
 
         avcodec_parameters_to_context(codecCtx, codecpar);
+        //设置多线程解码 TODO
+        codecCtx->thread_count = 4;             // 根据设备 CPU 核数设置，一般 2~4 就够
+        codecCtx->thread_type  = FF_THREAD_FRAME; // FF_THREAD_FRAME 推荐用于视频帧解码
+
         avcodec_open2(codecCtx, codec, nullptr);
 
         AVPacket *packet = av_packet_alloc();

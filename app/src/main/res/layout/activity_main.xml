@@ -9,8 +9,8 @@
     <!--必须使用wrap_content-->
     <SurfaceView
         android:id="@+id/surfaceView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="607.5px"
         android:layout_centerInParent="true" />
 
     <Button

@@ -64,15 +64,21 @@ NDK   编译工具链层。编译 C/C++ 代码
 + 7.0      7.0
 + 4.2.0+   6.7.1
 
-2. AGP 与 Android Studio 的版本对应关系
-AS版本                              支持AGP版本
-Narwhal 4 Feature Drop | 2025.1.4  4.0-8.13
-Narwhal 3 Feature Drop | 2025.1.3  4.0-8.13
-Narwhal Feature Drop | 2025.1.2	   4.0-8.12
-Narwhal | 2025.1.1	               3.2-8.11
-Meerkat Feature Drop | 2024.3.2	   3.2-8.10 #当前版本 2024.3.2 Patch 1
-Meerkat | 2024.3.1	               3.2-8.9
-Ladybug Feature Drop | 2024.2.2	   3.2-8.8
+2. Android Studio 的版本与 AGP 对应关系
++ AS版本                              支持AGP版本
++ Narwhal 4 Feature Drop | 2025.1.4  4.0-8.13
++ Narwhal 3 Feature Drop | 2025.1.3  4.0-8.13
++ Narwhal Feature Drop | 2025.1.2	   4.0-8.12
++ Narwhal | 2025.1.1	               3.2-8.11
++ Meerkat Feature Drop | 2024.3.2	   3.2-8.10 #当前版本 2024.3.2 Patch 1
++ Meerkat | 2024.3.1	               3.2-8.9
++ Ladybug Feature Drop | 2024.2.2	   3.2-8.8
++ AS最后一个大版本
++ Meerkat Feature Drop | 2024.3.2 Patch 1 May 28, 2025 #当前使用
++ Jellyfish | 2023.3.1 Patch 2 June 10, 2024
++ Giraffe | 2022.3.1 Patch 4 November 16, 2023
++ Dolphin | 2021.3.1 Patch 1 October 13, 2022
++ Arctic Fox | 2020.3.1 Patch 4 December 8, 2021
 
 3. CMake版本对应
 关系：AGP → 调用 CMake → 调用 NDK → 生成 libxxx.so
@@ -83,15 +89,13 @@ AGP版本   推荐CMake版本 NDK     说明
 
 4. NDK版本与C++版本对应
 NDK版本	 支持的C++标准	        
-r27   C++20 稳定 / C++23 部分实现
-r26   C++20 全面支持 / 实验性 C++23
-r25b  C++17 / 大部分 C++20
-r24   C++17 完整 / C++20 改进
-r23b  C++17 完整 / C++20 部分支持   
-r22b  C++17 / 部分 C++20
-r21e  C++17 / 实验性 C++20
-
-
++ r27   C++20 稳定 / C++23 部分实现
++ r26   C++20 全面支持 / 实验性 C++23
++ r25b  C++17 / 大部分 C++20
++ r24   C++17 完整 / C++20 改进
++ r23b  C++17 完整 / C++20 部分支持   
++ r22b  C++17 / 部分 C++20
++ r21e  C++17 / 实验性 C++20
 
 
 ## 介绍

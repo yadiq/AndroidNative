@@ -8,7 +8,7 @@
 #include "test/CurlTest.h"
 #include "test/TypeTest.h"
 #include "test/OpensslTest.h"
-#include "test/MyHandle.h"
+#include "test/TestThread.h"
 #include "nativeGlobals.h"
 
 
@@ -118,10 +118,10 @@ nativeInit(JNIEnv *env, jobject thiz) {
     env->SetLongField(thiz, nativeDataFieldId, reinterpret_cast<jlong>(data));
     //保存变量
     data->app = env->NewGlobalRef(thiz); //保存java类实例
-    auto *myHandle = new MyHandle(data->app);
-    data->myHandle = myHandle;
+    auto *testThread = new TestThread(data->app);
+    data->testThread = testThread;
     //开始线程
-    myHandle->startThread();
+    testThread->start();
 }
 
 //释放（执行速度慢，避免重复操作）
@@ -134,12 +134,13 @@ nativeRelease(JNIEnv *env, jobject thiz) {
     }
     auto *data = reinterpret_cast<CustomData *>(ptr);
     //结束线程
-    data->myHandle->stopThread();
+    data->testThread->stop();
+    data->testThread->join();
     //释放对象
     env->DeleteGlobalRef(data->app);
     data->app = nullptr;
-    delete data->myHandle;
-    data->myHandle = nullptr;
+    delete data->testThread;
+    data->testThread = nullptr;
     delete data;
     env->SetLongField(thiz, nativeDataFieldId, 0L); //清空指针
 }

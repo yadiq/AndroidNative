@@ -6,7 +6,7 @@
 #define ANDROIDNATIVE_NATIVEGLOBALS_H
 
 #include <jni.h>
-#include "test/MyHandle.h"
+#include "test/TestThread.h"
 
 //存储全局变量
 //extern 变量声明，不分配内存，告诉编译器变量在其他地方定义。可跨文件访问
@@ -21,7 +21,7 @@ extern pthread_key_t threadKey; //存储线程本地数据的key
 //用结构体保存变量信息，传递给对象，以执行回调函数
 struct CustomData {
     jobject app; //java类的全局引用
-    MyHandle *myHandle; //c++对象
+    TestThread *testThread; //c++对象
 };
 
 
